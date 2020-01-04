@@ -5,16 +5,16 @@
                 <img src="../images/logo1.png">
                 <ul class="ul1">
                     <li>
-                        <a href="#">动画</a>
+                        <a href="http://localhost:8080/animelist">动画</a>
                     </li>
                     <li>
-                        <a href="#">书籍</a>
+                        <a href="http://localhost:8080/booklist">书籍</a>
                     </li>
                     <li>
                         <a href="#">游戏</a>
                     </li>
                     <li>
-                        <a href="#">音乐</a>
+                        <a href="http://localhost:8080/musiclist">音乐</a>
                     </li>
                     <li>
                         <a href="#">三次元</a>
@@ -22,7 +22,7 @@
                 </ul>
                 <ul class="ul2">
                     <li>
-                        <a href="#">人物</a>
+                        <a href="http://localhost:8080/peoplelist">人物</a>
                     </li>
                     <li>
                         <a href="#">超展开</a>
@@ -577,7 +577,6 @@
 
 <script>
     import axios from 'axios'
-
     export default {
         name: "index",
         data() {

@@ -5,16 +5,16 @@
                 <img src="../images/logo1.png">
                 <ul class="ul1">
                     <li>
-                        <a href="#">动画</a>
+                        <a href="http://localhost:8080/animelist">动画</a>
                     </li>
                     <li>
-                        <a href="#">书籍</a>
+                        <a href="http://localhost:8080/booklist">书籍</a>
                     </li>
                     <li>
                         <a href="#">游戏</a>
                     </li>
                     <li>
-                        <a href="#">音乐</a>
+                        <a href="http://localhost:8080/musiclist">音乐</a>
                     </li>
                     <li>
                         <a href="#">三次元</a>
@@ -22,7 +22,7 @@
                 </ul>
                 <ul class="ul2">
                     <li>
-                        <a href="#">人物</a>
+                        <a href="http://localhost:8080/peoplelist">人物</a>
                     </li>
                     <li>
                         <a href="#">超展开</a>
@@ -69,322 +69,38 @@
                         </div>
                         <div class="section">
                             <ul class="ul3">
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
+                                <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
+                                    :key="index">
+                                    <a><img class="cover" :src="item.bookIcon"></a>
                                     <div class="inner">
                                         <div class="collect">
-                                            <ul class="ul4">
+                                            <ul class="ul9">
                                                 <li>
                                                     <a>
-                                                        <span>收藏</span>
+                                                        <span v-show="item.show"
+                                                              @mouseover="selectStyle (item)"
+                                                        >收藏</span>
                                                     </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
+                                                    <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)">
+                                                        <li><a>想看</a></li>
+                                                        <li><a>看过</a></li>
+                                                        <li><a>在看</a></li>
+                                                        <li><a>搁置</a></li>
+                                                        <li><a>抛弃</a></li>
+                                                    </ul>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
+                                        <h3><a>{{item.bookName}}</a></h3>
+                                        <span class="rank"><small>Rank</small>{{index+1}}</span>
                                         <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
+                                            {{item.bookJishu}}话 / {{item.bookTime}} / {{item.bookAuthor}}
                                         </p>
                                         <p class="rateinfo">
                                             <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
-
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a><img class="cover" src="../images/未来日记.jpg"></a>
-                                    <div class="inner">
-                                        <div class="collect">
-                                            <ul class="ul4">
-                                                <li>
-                                                    <a>
-                                                        <span>收藏</span>
-                                                    </a>
-                                                    <!--<ul>-->
-                                                    <!--<li>想看</li>-->
-                                                    <!--<li>看过</li>-->
-                                                    <!--<li>在看</li>-->
-                                                    <!--<li>搁置</li>-->
-                                                    <!--</ul>-->
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3><a>未来日记</a></h3>
-                                        <span class="rank"><small>Rank</small>1</span>
-                                        <p class="info">
-                                            26话 / 1998年10月23日 / 渡辺信一郎 / 矢立肇 / 川元利浩
-                                        </p>
-                                        <p class="rateinfo">
-                                            <span><Rate class="rateinfo1" disabled
-                                                        v-model="valueDisabled"/></span>
-                                            <small class="fade">5</small>
-                                            <span class="sum">(6330人评分)</span>
+                                                        v-model="item.score"/></span>
+                                            <small class="fade">{{item.score}}</small>
+                                            <span class="sum">({{item.number}}人评分)</span>
 
                                         </p>
                                     </div>
@@ -397,64 +113,30 @@
                         <div class="sideInner">
                             <h2 class="subtitle">类型</h2>
                             <ul class="ul5">
-                                <li>
-                                    <a :class="clsstr">全部</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">青春</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">热血</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">校园</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">恋爱</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">恐怖</a>
+                                <li v-for="(item,index) in showlist2" :info="item" :key="index">
+                                    <a :class="clsstr" @click="doclick(item)">{{item}}</a>
                                 </li>
                             </ul>
                             <h2 class="subtitle">时间</h2>
                             <ul class="ul6">
-                                <li>
-                                    <a :class="clsstr">来年们</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2020年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2019年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2018年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2017年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2016年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2015年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2014年</a>
-                                </li>
-                                <li>
-                                    <a :class="clsstr">2013年</a>
+                                <li v-for="(item,index) in timelist" :info="item" :key="index">
+                                    <a :class="clsstr" @click="doclick2(item)">{{item}}年</a>
                                 </li>
                             </ul>
                             <h2 class="subtitle">拼音</h2>
                             <ul class="ul7">
                                 <li v-for="(item,index) in timeinfo" :info="item" :key="index">
-                                    <a :class="clsstr">{{item}}</a>
+                                    <a :class="clsstr" >{{item}}</a>
                                 </li>
 
                             </ul>
                         </div>
                     </div>
+
+                </div>
+                <div class="page">
+                    <Page :total="total" :current="current" :page-size="size"
+                          prev-text="上一页" next-text="下一页" @on-change="change"/>
                 </div>
                 <div class="footer">
                     <ul class="ul100">
@@ -522,6 +204,8 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     export default {
         name: "booklist",
         data() {
@@ -534,9 +218,103 @@
                     'M', 'N', 'O', 'P', 'Q', 'R',
                     'S', 'T', 'U', 'V', 'W', 'X',
                     'Y', 'Z',
-                ]
+                ],
+                bookInfo: [
+                    {
+                        bookAuthor: '',
+                        bookCharacter: '',
+                        bookDescription: '',
+                        bookIcon: '',
+                        bookId: '',
+                        bookJishu: '',
+                        bookName: '',
+                        bookStatus: '',
+                        bookTime: '',
+                        labelType: '',
 
+                    }
+
+                ],
+                showlist: [],
+                showlist2:[],
+                timelist:[],
+                current: 1,
+                size: 10,
             }
+        },
+        computed: {
+            total() {
+                return this.bookInfo.length;
+            },
+
+        },
+
+        methods: {
+            change(val) {
+                this.current = val;
+                this.showlist = [];
+                for (var i = 0; i < this.size; i++) {
+                    var index = (this.current - 1) * this.size + i;
+                    if (index < this.bookInfo.length) {
+                        var prod = this.bookInfo[index];
+                        this.showlist.push(prod);
+                    }
+                    else
+                        break;
+                }
+            },
+            selectStyle (item) {
+                item.show=false;
+                item.show2=true;
+            },
+            outStyle (item) {
+                item.show=true;
+                item.show2=false;
+            },
+
+            doclick(item){
+                axios.post("http://localhost:8090/bangumi/book/type", {
+                    bookName: item
+                }).then((res) => {
+                    this.bookInfo=res.data;
+                    this.showlist=res.data;
+
+                })
+            },
+
+            doclick2(item){
+                axios.post("http://localhost:8090/bangumi/book/time", {
+                    time: item
+                }).then((res) => {
+                    this.bookInfo=res.data;
+                    this.showlist=res.data;
+
+                })
+            },
+
+
+        },
+
+        created: function () {
+            axios.get("http://localhost:8090/bangumi/book/list")
+                .then((res) => {
+                    this.bookInfo = res.data
+                    this.showlist = res.data
+                    console.log(res.data)
+                })
+
+            axios.get("http://localhost:8090/bangumi/book/type")
+                .then((res) => {
+                    this.showlist2=res.data;
+                    console.log('类型列表:'+res.data)
+                })
+            axios.get("http://localhost:8090/bangumi/book/time")
+                .then((res) => {
+                    this.timelist=res.data;
+                    console.log('时间列表:'+res.data)
+                })
+
+
         }
     }
 </script>
@@ -732,7 +510,7 @@
 
     }
 
-    .ul3 li {
+    .ul3 > li {
         background-color: transparent;
         position: relative;
         padding: 7px 5px;
@@ -740,11 +518,11 @@
         height: 126px;
     }
 
-    .ul3 li:nth-of-type(even) {
+    .ul3 >li:nth-of-type(even) {
         background-color: #f9f9f9;
     }
 
-    .ul3 li a {
+    .ul3 > li > a {
         float: left;
     }
 
@@ -765,14 +543,14 @@
 
     }
 
-    .ul4 li {
+    .ul4 > li {
         width: 55px;
         height: 27px;
         padding: 0;
         border: 0;
     }
 
-    .ul4 li a {
+    .ul4 > li > a {
         display: inline-block;
         line-height: 20px;
         color: #666;
@@ -782,6 +560,74 @@
         font-size: 12px;
         width: 50px;
     }
+
+    .ul8 {
+        position: absolute;
+        left:-20px;
+        top: -5px;
+        z-index: 99;
+        width: 235px;
+        padding: 0;
+        border-radius: 5px;
+        background-clip: padding-box;
+        background-color: rgba(254, 254, 254, 0.9);
+        border: 1px solid #DDD;
+        box-shadow: 2px 2px 5px #EEE;
+    }
+
+    .ul8 li {
+        float: left;
+        margin: 0;
+        width: auto;
+    }
+
+    .ul8 li:hover{
+        background: rgba(54,156,248,0.92);
+    }
+    .ul8 li:hover a{
+        color: white;
+    }
+
+    .ul8 li a {
+        display: block;
+        padding: 5px 10px;
+        border-left: 1px solid #EEE;
+        border-right: 1px solid #FFF;
+        font-size: 12px;
+    }
+
+
+
+    .ul9 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .ul9 > li {
+        margin: 0;
+        float: none;
+
+    }
+
+    .ul9 > li > a {
+        display: inline-block;
+        text-decoration: none;
+        line-height: 20px;
+        margin: 0 5px 5px 0;
+        padding: 0 12px;
+        border-radius: 4px;
+        color: #666;
+        border: 1px solid #DDD;
+        text-shadow: 0px 1px 2px #FFF;
+        background-image: -webkit-linear-gradient(top, #FFF 0%, #FAFAFA 100%);
+        background-image: -o-linear-gradient(top, #FFF 0%, #FAFAFA 100%);
+        background-image: linear-gradient(to bottom, #FFF 0%, #FAFAFA 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fffafafa', GradientType=0);
+        box-shadow: 0 1px 2px #EEE, inset 0 1px 1px #FFF;
+    }
+
+
 
     .inner h3 {
         font-weight: normal;
@@ -926,6 +772,7 @@
         padding: 3px 0 3px 10px;
         width: 60px;
         font-size: 11px;
+        text-align: center;
     }
 
     .ul6 li a {
@@ -962,7 +809,6 @@
         animation: ttt 2s 1 forwards;
     }
 
-
     /*下面是底部代码*/
     .footer {
         width: 1000px;
@@ -980,16 +826,17 @@
         padding: 15px 10px;
     }
 
-    .ul100 li{
+    .ul100 li {
         display: block;
         float: left;
         width: 25%;
     }
 
-    .ul100 li a{
+    .ul100 li a {
         color: #444;
     }
-    .ul100 li dt{
+
+    .ul100 li dt {
         font-size: 12px;
         font-weight: bold;
         margin-bottom: 3px;
@@ -998,7 +845,8 @@
         width: 177px;
         border-bottom: 1px solid #CCC;
     }
-    .ul100 li dd{
+
+    .ul100 li dd {
         margin-bottom: 0.2em;
         margin-left: 15px;
         font-size: 12px;

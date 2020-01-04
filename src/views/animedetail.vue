@@ -182,9 +182,6 @@
 
                         </div>
                         <div class="section">
-                            <video style="width:100%; height:100%; object-fit: fill" controls>
-                                <source src="../images/总和成.mp4" type="video/mp4">
-                            </video>
                             <h2 class="subtitle">吐槽箱</h2>
                             <div class="comment-box">
                                     <div class="item">
