@@ -8,6 +8,10 @@ import musiclist from '../views/musiclist'
 import peoplelist from '../views/peoplelist'
 import personal from '../views/personal'
 import animedetail from '../views/animedetail'
+import bookdetail from '../views/bookdetail'
+import musicdetail from '../views/musicdetail'
+import test from '../views/test'
+
 
 Vue.use(VueRouter)
 
@@ -48,9 +52,24 @@ const routes = [
         component: personal
     },
     {
-        path: '/animedetail',
+        path: '/animedetail/:id',
         name: 'animedetail',
         component: animedetail
+    },
+    {
+        path: '/bookdetail/:id',
+        name: 'bookdetail',
+        component: bookdetail
+    },
+    {
+        path: '/test',
+        name: 'test',
+        component: test
+    },
+    {
+        path: '/musicdetail/:id',
+        name: 'musicdetail',
+        component: musicdetail
     },
   {
     path: '/about',

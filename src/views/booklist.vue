@@ -71,7 +71,9 @@
                             <ul class="ul3">
                                 <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
                                     :key="index">
+                                    <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                     <a><img class="cover" :src="item.bookIcon"></a>
+                                    </router-link>
                                     <div class="inner">
                                         <div class="collect">
                                             <ul class="ul9">
@@ -81,17 +83,19 @@
                                                               @mouseover="selectStyle (item)"
                                                         >收藏</span>
                                                     </a>
-                                                    <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)">
-                                                        <li><a>想看</a></li>
-                                                        <li><a>看过</a></li>
-                                                        <li><a>在看</a></li>
-                                                        <li><a>搁置</a></li>
-                                                        <li><a>抛弃</a></li>
+                                                    <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)" @click="doclick3(item)">
+                                                        <li @click="modal1 = true"><a>想看</a></li>
+                                                        <li @click="modal1 = true"><a>看过</a></li>
+                                                        <li @click="modal1 = true"><a>在看</a></li>
+                                                        <li @click="modal1 = true"><a>搁置</a></li>
+                                                        <li @click="modal1 = true"><a>抛弃</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
                                         </div>
+                                        <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                         <h3><a>{{item.bookName}}</a></h3>
+                                        </router-link>
                                         <span class="rank"><small>Rank</small>{{index+1}}</span>
                                         <p class="info">
                                             {{item.bookJishu}}话 / {{item.bookTime}} / {{item.bookAuthor}}
@@ -106,6 +110,34 @@
                                     </div>
                                 </li>
                             </ul>
+
+                            <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+bookInfo2.bookName"
+                                   @on-ok="ok(bookInfo2)"
+                                   @on-cancel="cancel">
+                                <div class="window">
+                                    <div class="box">
+                                        <form>
+                                            <div class="type" >
+                                                <RadioGroup v-model="type">
+                                                    <Radio :label="1">在看</Radio>
+                                                    <Radio :label="2">看过</Radio>
+                                                    <Radio :label="3">想看</Radio>
+                                                    <Radio :label="4">搁置</Radio>
+                                                    <Radio :label="5">抛弃</Radio>
+                                                </RadioGroup>
+                                            </div>
+                                            <div class="cell">
+                                                <p class="tip">
+                                                    <label for="comment">吐槽 (简评，最多200字):</label></p>
+                                                <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
+                                            </div>
+                                        </form>
+
+                                    </div>
+
+                                </div>
+                            </Modal>
+
 
                         </div>
                     </div>
@@ -240,6 +272,10 @@
                 timelist:[],
                 current: 1,
                 size: 10,
+                modal1: false,
+                comment:'',
+                type:'',
+                bookInfo2:[]
             }
         },
         computed: {
@@ -291,6 +327,23 @@
 
                 })
             },
+            ok (bookInfo2) {
+                axios.post("http://localhost:8090/bangumi/book/collect", {
+                    userId: 1,
+                    bookId:bookInfo2.bookId,
+                    code:this.type
+                }).then((res) => {
+                    this.$Message.info('Clicked ok');
+                })
+
+            },
+            cancel () {
+                this.$Message.info('Clicked cancel');
+            },
+
+            doclick3(item){
+                this.bookInfo2=item
+            }
 
 
         },
@@ -808,6 +861,72 @@
     .ul7 li a:hover {
         animation: ttt 2s 1 forwards;
     }
+
+    /*收藏界面*/
+    .window {
+        /*margin-left: -265px;*/
+        /*width: 530px;*/
+        /*margin-top: -195px;*/
+        /*display: block;*/
+        /*position: fixed;*/
+        /*z-index: 102;*/
+        /*text-align: left;*/
+        /*top: 50%;*/
+        /*left: 50%;*/
+        /*border-radius: 10px;*/
+        /*background: #FFF;*/
+        /*color: #000;*/
+    }
+
+    .box{
+        /*padding: 10px 15px;*/
+    }
+
+    .ivu-modal-body{
+        padding: 0;
+    }
+    .ivu-modal-header{
+        background: rgba(240,145,153,1);
+        padding: 0px 0px 0px 0px;
+
+    }
+    .ivu-modal-header-inner{
+        color: white;
+    }
+
+    .type{
+        margin: 0 0 5px 0;
+        font-size: 14px;
+        padding: 5px 0 10px 0;
+        color: #666;
+        border-bottom: 1px solid #EEE;
+    }
+
+    .type > label:not(:first-child){
+        margin-left: 5px;
+    }
+
+    .tip{
+        font-size: 12px;
+        color: #666;
+    }
+
+    .quick{
+        max-width: 470px;
+        font-size: 15px;
+        overflow: auto;
+        margin: 3px 0;
+        padding: 4px 5px;
+        width: 99%;
+        line-height: 22px;
+        border-radius: 5px;
+        background-clip: padding-box;
+        background-color: #FFF;
+        color: #000;
+        border: 1px solid #d9d9d9;
+    }
+
+    /*分割线*/
 
     /*下面是底部代码*/
     .footer {

@@ -80,25 +80,25 @@
                             <div class="box">
                                 <div class="center">
                                     <a>
-                                        <img class="cover" :src="animeInfo.animeIcon">
+                                        <img class="cover" :src="musicInfo.musicIcon">
                                     </a>
                                 </div>
                                 <ul class="ul4">
                                     <li>
                                         <span class="tip">中文名: </span>
-                                        {{animeInfo.animeName}}
+                                        {{musicInfo.musicName}}
                                     </li>
                                     <li>
                                         <span class="tip">放送时间: </span>
-                                        {{animeInfo.animeTime}}
+                                        {{musicInfo.musicTime}}
                                     </li>
                                     <li>
-                                        <span class="tip">原作: </span>
-                                        <a>{{animeInfo.animeAuthor}}</a>
+                                        <span class="tip">作曲: </span>
+                                        <a>{{musicInfo.musicAuthor}}</a>
                                     </li>
                                     <li>
-                                        <span class="tip">集数: </span>
-                                        {{animeInfo.animeJishu}}话
+                                        <span class="tip">价格: </span>
+                                        ￥{{musicInfo.musicPrice}}
                                     </li>
                                 </ul>
                             </div>
@@ -109,7 +109,7 @@
                         <div class="content-right-header">
                             <div class="intro">
                                 <div class="intro1">
-                                    {{animeInfo.animeDescription}}
+                                    {{musicInfo.musicDescription}}
                                 </div>
                             </div>
                             <div class="rate">
@@ -129,20 +129,15 @@
                                         <div>
                                             <div class="img2"></div>
                                             <div>
-                                                <span class="number">{{animeInfo.score}}</span>
+                                                <span class="number">7.3</span>
                                                 <span class="description">推荐</span>
                                             </div>
                                             <div>
                                                 <small class="grey">Bangumi Game Ranked:</small>
                                             </div>
-                                            <p class="rateinfo" @click="doclick" >
-                                            <Rate class="rateinfo1" allow-half v-model="rate" />
-
-                                            </p>
-                                            <span class="span1">{{rate}}分</span>
                                             <div class="rate3">
                                                 <div class="rate4">
-                                                    <small class="grey"><span property="v:votes">{{sum}}</span> votes
+                                                    <small class="grey"><span property="v:votes">250</span> votes
                                                     </small>
                                                 </div>
 
@@ -193,26 +188,26 @@
                         <div class="section">
                             <h2 class="subtitle">吐槽箱</h2>
                             <div class="comment-box">
-                                    <div class="item">
-                                        <a class="a1"><span><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                        <div class="text-main">
-                                            <div class="text">
-                                                <a class="l">C.C</a>
-                                                <small class="grey">@ 2019-12-21 21:04</small>
-                                                <p>请选择女主的攻略难度.jpg</p>
-                                            </div>
+                                <div class="item">
+                                    <a class="a1"><span><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
+                                    <div class="text-main">
+                                        <div class="text">
+                                            <a class="l">C.C</a>
+                                            <small class="grey">@ 2019-12-21 21:04</small>
+                                            <p>请选择女主的攻略难度.jpg</p>
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <a class="a1"><span class="img4"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                        <div class="text-main">
-                                            <div class="text">
-                                                <a class="l">C.C</a>
-                                                <small class="grey">@ 2019-12-21 21:04</small>
-                                                <p>请选择女主的攻略难度.jpg</p>
-                                            </div>
+                                </div>
+                                <div class="item">
+                                    <a class="a1"><span class="img4"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
+                                    <div class="text-main">
+                                        <div class="text">
+                                            <a class="l">C.C</a>
+                                            <small class="grey">@ 2019-12-21 21:04</small>
+                                            <p>请选择女主的攻略难度.jpg</p>
                                         </div>
                                     </div>
+                                </div>
                                 <div class="item">
                                     <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
                                     <div class="text-main">
@@ -287,7 +282,7 @@
 <script>
     import axios from 'axios'
     export default {
-        name: "animedetail",
+        name: "musicdetail",
         data() {
             return {
                 intro:
@@ -299,8 +294,7 @@
                 count4: '5',
                 count5: '5',
                 sum: '20',
-                animeInfo:'',
-                rate:0
+                musicInfo:'',
             }
         },
         computed: {
@@ -350,41 +344,18 @@
                 }
             }
         },
-        methods:{
-            doclick() {
-                axios.post("http://localhost:8090/bangumi/anime/rateup", {
-                    animeId: this.animeInfo.animeId,
-                    userId:1,
-                    score:this.rate,
-                }).then((res) => {
-                    console.log(res)
-
-                })
-            }
-        },
         created:function () {
             var id = this.$route.params.id
 
             if (id == null) {
-                id = this.animeInfo.animeId
+                id = this.musicInfo.id
             }
-            axios.post("http://localhost:8090/bangumi/anime/detail", {
-                animeId: id
+            axios.post("http://localhost:8090/bangumi/music/detail", {
+                musicId: id
             }).then((res) => {
-                this.animeInfo=res.data;
+                this.musicInfo=res.data;
                 console.log(res.data)
 
-            })
-            axios.post("http://localhost:8090/bangumi/anime/rate", {
-                animeId: id
-            }).then((res) => {
-                this.count1=res.data.count1;
-                this.count2=res.data.count2;
-                this.count3=res.data.count3;
-                this.count4=res.data.count4;
-                this.count5=res.data.count5;
-                this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
-                console.log(res.data)
             })
         }
     }
@@ -792,19 +763,6 @@
         margin-left: 16px;
         text-align: center;
 
-    }
-
-    .rateinfo1 {
-        margin-right: 14px;
-    }
-
-    .rateinfo1 >>> .ivu-rate-star {
-
-    }
-    .span1{
-        position: absolute;
-        top: 115%;
-        right: 14%;
     }
 
     .count {
