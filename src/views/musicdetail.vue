@@ -58,7 +58,7 @@
         <div class="content">
             <div class="content-header">
                 <h1>
-                    <a>未来日记</a>
+                    <a>{{musicInfo.musicName}}</a>
                     <small class="grey">TV</small>
                 </h1>
                 <div class="content-header-1">
@@ -93,7 +93,7 @@
                                         {{musicInfo.musicTime}}
                                     </li>
                                     <li>
-                                        <span class="tip">作曲: </span>
+                                        <span class="tip">原作: </span>
                                         <a>{{musicInfo.musicAuthor}}</a>
                                     </li>
                                     <li>
@@ -117,11 +117,11 @@
                                     <h2>收藏盒</h2>
                                     <div class="tab">
                                         <ul class="ul5">
-                                            <li><a class="thickbox"><span>想看</span></a></li>
-                                            <li><a class="thickbox"><span>看过</span></a></li>
-                                            <li><a class="thickbox"><span>在看</span></a></li>
-                                            <li><a class="thickbox"><span>搁置</span></a></li>
-                                            <li><a class="thickbox"><span>抛弃</span></a></li>
+                                            <li @click="modal1 = true"><a class="thickbox"><span>想看</span></a></li>
+                                            <li @click="modal1 = true"><a class="thickbox"><span>看过</span></a></li>
+                                            <li @click="modal1 = true"><a class="thickbox"><span>在看</span></a></li>
+                                            <li @click="modal1 = true"><a class="thickbox"><span>搁置</span></a></li>
+                                            <li @click="modal1 = true"><a class="thickbox"><span>抛弃</span></a></li>
                                         </ul>
                                     </div>
                                     <hr class="board">
@@ -129,15 +129,20 @@
                                         <div>
                                             <div class="img2"></div>
                                             <div>
-                                                <span class="number">7.3</span>
+                                                <span class="number">{{musicInfo.score}}</span>
                                                 <span class="description">推荐</span>
                                             </div>
                                             <div>
                                                 <small class="grey">Bangumi Game Ranked:</small>
                                             </div>
+                                            <p class="rateinfo" @click="doclick" >
+                                                <Rate class="rateinfo1" allow-half v-model="rate" />
+
+                                            </p>
+                                            <span class="span1">{{rate}}分</span>
                                             <div class="rate3">
                                                 <div class="rate4">
-                                                    <small class="grey"><span property="v:votes">250</span> votes
+                                                    <small class="grey"><span property="v:votes">{{sum}}</span> votes
                                                     </small>
                                                 </div>
 
@@ -145,39 +150,66 @@
                                                     <li class="item-inner">
                                                         <div>
                                                             <div class="count">{{a}}%</div>
-                                                            <div class="fill" v-bind:style="{height: a+'px'}"></div>
+                                                            <div class="fill" v-bind:style="{height: a*0.8+'px'}"></div>
                                                             <div class="order">1</div>
                                                         </div>
                                                     </li>
                                                     <li class="item-inner">
                                                         <div>
                                                             <div class="count">{{b}}%</div>
-                                                            <div class="fill" v-bind:style="{height: b+'px'}"></div>
+                                                            <div class="fill" v-bind:style="{height: b*0.8+'px'}"></div>
                                                             <div class="order">2</div>
                                                         </div>
                                                     </li>
                                                     <li class="item-inner">
                                                         <div>
                                                             <div class="count">{{c}}%</div>
-                                                            <div class="fill" v-bind:style="{height: c+'px'}"></div>
+                                                            <div class="fill" v-bind:style="{height: c*0.8+'px'}"></div>
                                                             <div class="order">3</div>
                                                         </div>
                                                     </li>
                                                     <li class="item-inner">
                                                         <div>
                                                             <div class="count">{{d}}%</div>
-                                                            <div class="fill" v-bind:style="{height: d+'px'}"></div>
+                                                            <div class="fill" v-bind:style="{height: d*0.8+'px'}"></div>
                                                             <div class="order">4</div>
                                                         </div>
                                                     </li>
                                                     <li class="item-inner">
                                                         <div>
                                                             <div class="count">{{e}}%</div>
-                                                            <div class="fill" v-bind:style="{height: e+'px'}"></div>
+                                                            <div class="fill" v-bind:style="{height: e*0.8+'px'}"></div>
                                                             <div class="order">5</div>
                                                         </div>
                                                     </li>
                                                 </ul>
+                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+musicInfo.musicName"
+                                                       @on-ok="ok(musicInfo)"
+                                                       @on-cancel="cancel">
+                                                    <div class="window">
+                                                        <div class="box1">
+                                                            <form>
+                                                                <div class="type" >
+                                                                    <RadioGroup v-model="type">
+                                                                        <Radio :label="1">在看</Radio>
+                                                                        <Radio :label="2">看过</Radio>
+                                                                        <Radio :label="3">想看</Radio>
+                                                                        <Radio :label="4">搁置</Radio>
+                                                                        <Radio :label="5">抛弃</Radio>
+                                                                    </RadioGroup>
+                                                                </div>
+                                                                <div class="cell">
+                                                                    <p class="tip">
+                                                                        <label for="comment">吐槽 (简评，最多200字):</label></p>
+                                                                    <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+
+                                                    </div>
+                                                </Modal>
+
                                             </div>
                                         </div>
                                     </div>
@@ -185,89 +217,22 @@
                             </div>
 
                         </div>
+
                         <div class="section">
                             <h2 class="subtitle">吐槽箱</h2>
                             <div class="comment-box">
-                                <div class="item">
-                                    <a class="a1"><span><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
+                                <div class="item" v-for="(item,index) in dInfo.slice(0, 4)" :info="item"
+                                     :key="index">
+                                    <a class="a1"><span><img class="img3" :src=item.userIcon> </span></a>
                                     <div class="text-main">
                                         <div class="text">
-                                            <a class="l">C.C</a>
+                                            <a class="l">{{item.userName}}</a>
                                             <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
+                                            <p>{{item.commentDescription}}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img4"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <a class="a1"><span class="img3"><img class="img3" src="../images/朝倉由夢.jpg"> </span></a>
-                                    <div class="text-main">
-                                        <div class="text">
-                                            <a class="l">C.C</a>
-                                            <small class="grey">@ 2019-12-21 21:04</small>
-                                            <p>请选择女主的攻略难度.jpg</p>
-                                        </div>
-                                    </div>
-                                </div>
+
 
                             </div>
                         </div>
@@ -294,7 +259,13 @@
                 count4: '5',
                 count5: '5',
                 sum: '20',
-                musicInfo:'',
+                musicInfo:[],
+                rate:0,
+                modal1:false,
+                comment:'',
+                type:'',
+                dInfo:[],
+                peoInfo:[],
             }
         },
         computed: {
@@ -344,12 +315,57 @@
                 }
             }
         },
+        methods:{
+
+
+            doclick() {
+                axios.post("http://localhost:8090/bangumi/music/rateup", {
+                    musicId: this.musicInfo.musicId,
+                    userId:2,
+                    score:this.rate,
+                }).then((res) => {
+                    axios.post("http://localhost:8090/bangumi/music/rate", {
+                        musicId: this.musicInfo.musicId
+                    }).then((res) => {
+                        this.count1=res.data.count1;
+                        this.count2=res.data.count2;
+                        this.count3=res.data.count3;
+                        this.count4=res.data.count4;
+                        this.count5=res.data.count5;
+                        this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
+                    })
+                    console.log(res)
+
+                })
+            },
+            ok (musicInfo) {
+                axios.post("http://localhost:8090/bangumi/music/collect", {
+                    userId: 1,
+                    musicId:musicInfo.musicId,
+                    code:this.type,
+                    comment:this.comment
+                }).then((res) => {
+                    axios.post("http://localhost:8090/bangumi/music/discuss", {
+                        musicId: this.musicInfo.musicId
+                    }).then((res) => {
+                        this.dInfo=res.data;
+                    })
+                    this.$Message.info('Clicked ok');
+
+                })
+
+            },
+            cancel () {
+                this.$Message.info('Clicked cancel');
+            },
+        },
         created:function () {
             var id = this.$route.params.id
 
             if (id == null) {
-                id = this.musicInfo.id
+                id = this.musicInfo.musicId
             }
+
             axios.post("http://localhost:8090/bangumi/music/detail", {
                 musicId: id
             }).then((res) => {
@@ -357,6 +373,26 @@
                 console.log(res.data)
 
             })
+
+            axios.post("http://localhost:8090/bangumi/music/rate", {
+                musicId: id
+            }).then((res) => {
+                this.count1=res.data.count1;
+                this.count2=res.data.count2;
+                this.count3=res.data.count3;
+                this.count4=res.data.count4;
+                this.count5=res.data.count5;
+                this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
+                console.log(res.data)
+            })
+
+            axios.post("http://localhost:8090/bangumi/music/discuss", {
+                musicId: id
+            }).then((res) => {
+                this.dInfo=res.data;
+                console.log(res.data)
+            })
+
         }
     }
 </script>
@@ -606,6 +642,10 @@
         box-shadow: 0 1px 5px #AAA;
     }
 
+    .tip{
+        font-size: 13px;
+    }
+
     .center {
         text-align: center;
     }
@@ -617,7 +657,6 @@
     .ul4 {
         width: 240px;
         height: 600px;
-        background: rgba(170, 170, 170, 0.2);
     }
 
     .ul4 li {
@@ -765,6 +804,25 @@
 
     }
 
+    .rateinfo{
+        position: relative;
+    }
+
+    .rateinfo1 {
+
+        margin-right: 14px;
+    }
+
+    .rateinfo1 >>> .ivu-rate-star {
+
+    }
+    .span1{
+        position: absolute;
+        left: 85%;
+        top: 45%;
+
+    }
+
     .count {
 
     }
@@ -800,7 +858,62 @@
         padding: 10px;
         margin: 0 0 5px 0;
         border-bottom: 1px solid #EEE;
+
     }
+
+    .ul7{
+        overflow: hidden;
+        margin: 5px 0 0 0;
+    }
+    .ul7 li{
+        margin: 0 0 10px;
+        display: block;
+        float: left;
+        font-size: 12px;
+        margin: 0pt 0pt 30px;
+        position: relative;
+        width: 33%;
+    }
+    .userContainer{
+        padding: 0 5px 0 55px;
+    }
+
+    .userContainer strong{
+        font-size: 14px;
+        font-weight: normal;
+        display: block;
+        margin: 0 0 3px 0;
+        padding: 0 0 3px 0;
+    }
+
+    .userimg{
+        margin: 0pt 0pt 0pt -55px;
+        cursor: pointer;
+        float: left;
+        display: flex;
+        align-items: center;
+
+    }
+
+    .span2{
+        width: 48px;
+        height: 48px;
+        display: inline-block;
+        border-radius: 5px;
+        box-shadow: inset #BBB 0px 0 2px 0px;
+        transition: border linear 0.2s, box-shadow linear 0.2s;
+
+    }
+
+    .span3{
+        margin-left: 5px;
+        border-bottom: 1px solid #EEE;
+        font-size: 14px;
+        font-weight: normal;
+        color: #0084B4;
+        width: 180px;
+    }
+
 
     .subtitle {
         font-weight: 300;
@@ -873,6 +986,73 @@
         position: relative;
         left: 24%;
     }
+
+
+    .window {
+        /*margin-left: -265px;*/
+        /*width: 530px;*/
+        /*margin-top: -195px;*/
+        /*display: block;*/
+        /*position: fixed;*/
+        /*z-index: 102;*/
+        /*text-align: left;*/
+        /*top: 50%;*/
+        /*left: 50%;*/
+        /*border-radius: 10px;*/
+        /*background: #FFF;*/
+        /*color: #000;*/
+    }
+
+    .box1{
+        /*padding: 10px 15px;*/
+    }
+
+    .ivu-modal-body{
+        padding: 0;
+    }
+    .ivu-modal-header{
+        background: rgba(240,145,153,1);
+        padding: 0px 0px 0px 0px;
+
+    }
+    .ivu-modal-header-inner{
+        color: white;
+    }
+
+    .type{
+        margin: 0 0 5px 0;
+        font-size: 14px;
+        padding: 5px 0 10px 0;
+        color: #666;
+        border-bottom: 1px solid #EEE;
+    }
+
+    .type > label:not(:first-child){
+        margin-left: 5px;
+    }
+
+    .tip{
+        font-size: 12px;
+        color: #666;
+    }
+
+    .quick{
+        max-width: 480px;
+        font-size: 15px;
+        overflow: auto;
+        margin: 3px 0;
+        padding: 4px 5px;
+        width: 99%;
+        line-height: 22px;
+        border-radius: 5px;
+        background-clip: padding-box;
+        background-color: #FFF;
+        color: #000;
+        border: 1px solid #d9d9d9;
+    }
+
+    /*分割线*/
+
 
 
 </style>

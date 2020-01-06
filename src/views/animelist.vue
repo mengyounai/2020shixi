@@ -110,7 +110,7 @@
                                     </div>
                                 </li>
                             </ul>
-                            <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+animeInfo2.animeName"
+                            <Modal class="model1"  v-model="modal1" id="color"  draggable scrollable :title="'收藏'+animeInfo2.animeName"
                                    @on-ok="ok(animeInfo2)"
                                    @on-cancel="cancel">
                                 <div class="window">
@@ -272,7 +272,8 @@
                 modal1: false,
                 comment:'',
                 type:'',
-                animeInfo2:[]
+                animeInfo2:[],
+                comment:''
             }
         },
         computed: {
@@ -328,7 +329,8 @@
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
                     userId: 1,
                     animeId:animeInfo2.animeId,
-                    code:this.type
+                    code:this.type,
+                    comment:this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
                 })
