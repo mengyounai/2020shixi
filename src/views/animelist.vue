@@ -273,7 +273,6 @@
                 comment:'',
                 type:'',
                 animeInfo2:[],
-                comment:''
             }
         },
         computed: {

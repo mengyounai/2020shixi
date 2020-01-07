@@ -227,7 +227,7 @@
                                                <a class="a2">
                                                    <span class="userimg">
                                                        <span class="span2"><img :src="item.peopleIcon"></span>
-                                                       <span class="span3">{{item.peopleName}}</span>
+                                                       <span class="span3"><span style="color:rgba(27,27,27,0.7)">主角:</span>{{item.peopleName}}</span>
                                                    </span>
                                                </a>
                                            </strong>

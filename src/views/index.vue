@@ -98,107 +98,48 @@
                             <div class="content2-content-1">
                                 <ul class="ul4">
                                     <li class="title"><h2><a>我的动画</a></h2></li>
-                                    <li><a>2部在看</a></li>
-                                    <li><a>180部看过</a></li>
+                                    <li><a>{{animeInfo1.length}}部在看</a></li>
+                                    <li><a>{{animeInfo2.length}}部看过</a></li>
                                     <li><a>2部想看</a></li>
                                     <li><a>10部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show2" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in animeInfo1.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/入间.jpg">
+                                                    <span class="img"><img :src="item.animeIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">魔入りました！入間くん</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/小英雄.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">我的英雄学院</p></a></li>
-
+                                                    <p class="name">{{item.animeName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show3" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">看过</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in animeInfo2.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/萤火之森.jpg">
+                                                    <span class="img"><img :src="item.animeIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">萤火之森</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/Muv-Luv.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">トータル・イクリプス</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/命运九重奏.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">NORN9 ノルン＋ノネット</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/慎勇.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">慎重勇者 ～この勇者が俺TUEEEくせに</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/刺客守则.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">アサシンズプライド</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/目隐都市的演绎者.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">メカクシティアクターズ</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/新石纪.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">Dr.STONE</p></a></li>
-
+                                                    <p class="name">{{item.animeName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -208,107 +149,50 @@
                             <div class="content2-content-1">
                                 <ul class="ul4">
                                     <li class="title"><h2><a>我的书籍</a></h2></li>
-                                    <li><a>2部在看</a></li>
-                                    <li><a>180部看过</a></li>
+                                    <li><a>{{bookInfo1.length}}部在看</a></li>
+                                    <li><a>{{bookInfo2.length}}部看过</a></li>
                                     <li><a>2部想看</a></li>
                                     <li><a>10部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show5" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in bookInfo1.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/入间.jpg">
+                                                    <span class="img"><img :src="item.bookIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">魔入りました！入間くん</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/小英雄.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
+                                                    <p class="name">{{item.bookName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
 
-                                        </span>
-                                                    <p class="name">我的英雄学院</p></a></li>
 
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show6" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">看过</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in bookInfo2.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/萤火之森.jpg">
+                                                    <span class="img"><img :src="item.bookIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">萤火之森</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/Muv-Luv.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">トータル・イクリプス</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/命运九重奏.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">NORN9 ノルン＋ノネット</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/慎勇.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">慎重勇者 ～この勇者が俺TUEEEくせに</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/刺客守则.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">アサシンズプライド</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/目隐都市的演绎者.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">メカクシティアクターズ</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/新石纪.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">Dr.STONE</p></a></li>
-
+                                                    <p class="name">{{item.bookName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -318,106 +202,48 @@
                             <div class="content2-content-1">
                                 <ul class="ul4">
                                     <li class="title"><h2><a>我的音乐</a></h2></li>
-                                    <li><a>2部在听</a></li>
-                                    <li><a>180部听过</a></li>
+                                    <li><a>{{musicInfo1.length}}部在听</a></li>
+                                    <li><a>{{musicInfo2.length}}部听过</a></li>
                                     <li><a>2部想听</a></li>
                                     <li><a>10部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show8" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">在听</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in musicInfo1.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/入间.jpg">
+                                                    <span class="img"><img :src="item.musicIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">魔入りました！入間くん</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/小英雄.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">我的英雄学院</p></a></li>
-
+                                                    <p class="name">{{item.musicName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="content2-content-2-1">
-                                    <div style="float: left;line-height: 90px;height: 90px;width: 35px">在看</div>
+                                <div v-show="show9" class="content2-content-2-1">
+                                    <div  style="float: left;line-height: 90px;height: 90px;width: 35px">听过</div>
                                     <div style="margin-top: 10px">
                                         <ul class="ul5">
-                                            <li>
+                                            <li v-for="(item,index) in musicInfo2.slice(0, 7)" :info="item" :key="index">
                                                 <a>
+                                                    <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/萤火之森.jpg">
+                                                    <span class="img"><img :src="item.musicIcon">
                                                     </span>
                                                         <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">萤火之森</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/Muv-Luv.jpg">
                                                     </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">トータル・イクリプス</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/命运九重奏.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">NORN9 ノルン＋ノネット</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/慎勇.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">慎重勇者 ～この勇者が俺TUEEEくせに</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/刺客守则.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">アサシンズプライド</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/目隐都市的演绎者.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">メカクシティアクターズ</p></a></li>
-                                            <li>
-                                                <a>
-                                                    <span class="pictureFrameGroup">
-                                                    <span class="img"><img src="../images/新石纪.jpg">
-                                                    </span>
-                                                        <span class="overlay"></span>
-
-                                        </span>
-                                                    <p class="name">Dr.STONE</p></a></li>
+                                                    <p class="name">{{item.musicName}}</p>
+                                                    </router-link>
+                                                </a>
+                                            </li>
 
                                         </ul>
                                     </div>
@@ -569,8 +395,6 @@
                     </ul>
                 </div>
             </div>
-
-
         </div>
     </div>
 </template>
@@ -581,17 +405,66 @@
         name: "index",
         data() {
             return {
-                animeInfo: [],
+                animeInfo:[],
+                bookInfo:[],
+                musicInfo:[],
+                animeInfo1: [],
+                animeInfo2: [],
+                bookInfo1:[],
+                bookInfo2:[],
+                musicInfo1:[],
+                musicInfo2:[],
+                show1:true,
+                show2:true,
+                show3:true,
+                show4:true,
+                show5:true,
+                show6:true,
+                show7:true,
+                show8:true,
+                show9:true
             }
         },
+
+        computed:{
+
+        },
+
         created: function () {
-            // axios.get("http://localhost:8080/bangumi/anime/list")
-            //     .then((res) => {
-            //         this.animeInfo = res.data
-            //         console.log(res.data)
-            //
-            //     })
-        }
+            axios.post("http://localhost:8090/bangumi/index/collectAll", {
+                userId: 1,
+            }).then((res) => {
+                this.animeInfo1=res.data.animeInfoList1
+                this.animeInfo2=res.data.animeInfoList2
+                this.bookInfo1=res.data.bookInfoList1
+                this.bookInfo2=res.data.bookInfoList2
+                this.musicInfo1=res.data.musicInfoList1
+                this.musicInfo1=res.data.musicInfoList1
+
+                if (this.animeInfo1.length==0){
+                    this.show2=false;
+                }
+                if (this.animeInfo2.length==0){
+                    this.show3=false;
+                }
+                if (this.bookInfo1.length==0){
+                    this.show5=false;
+                }
+                if (this.bookInfo2.length==0){
+                    this.show6=false;
+                }
+                if (this.musicInfo1.length==0){
+                    this.show8=false;
+                }
+                if (this.musicInfo2.length==0){
+                    this.show9=false;
+                }
+                console.log(res.data)
+
+
+            })
+        },
+
     }
 </script>
 
@@ -816,7 +689,9 @@
 
     .content2-sum {
 
-        height: 1000px;
+        overflow: hidden;
+
+        /*height: 1000px;*/
     }
 
     .content2 {

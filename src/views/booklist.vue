@@ -331,7 +331,8 @@
                 axios.post("http://localhost:8090/bangumi/book/collect", {
                     userId: 1,
                     bookId:bookInfo2.bookId,
-                    code:this.type
+                    code:this.type,
+                    comment:this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
                 })

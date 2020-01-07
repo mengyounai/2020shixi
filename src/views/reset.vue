@@ -58,9 +58,9 @@
         <div class="content">
             <div class="content-header">
                 <ul class="sectab">
-                    <li><a class="selected" href="http://localhost:8080/personal" style="  background: linear-gradient(to bottom, #5FA3DB 0%, #72B6E3 100%);
-        color: white;"><span>基本设置</span></a></li>
-                    <li><a href="http://localhost:8080/reset"><span>修改密码</span></a></li>
+                    <li><a class="selected" href="http://localhost:8080/personal" ><span>基本设置</span></a></li>
+                    <li><a href="http://localhost:8080/reset" style="background:linear-gradient(to bottom, #5FA3DB 0%, #72B6E3 100%);
+        color: white;"><span>修改密码</span></a></li>
                     <li><a><span>退出</span></a></li>
                 </ul>
                 <h1>我的个人设置</h1>
@@ -73,50 +73,38 @@
                         <table align="center" width="98%" cellspacing="0" cellpadding="5" class="setting">
                             <tbody>
                             <tr>
-                                <td valign="top" width="12%">昵称</td>
+                                <td valign="top" width="12%">绑定的邮箱</td>
                                 <td valign="top">
-                                    <input name="nickname" class="inputtext" type="text" v-model="formItem.userName" >
+                                    <Input name="nickname" class="inputtext" type="text" v-model="email" @on-blur="validateEmail()"/>
+                                    <span style="position:absolute;left:63%;line-height: 32px;color: red">{{errmsg1}}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top" width="12%">性别</td>
+                                <td valign="top" width="12%">现在的密码</td>
                                 <td valign="top">
-                                    <RadioGroup v-model="formItem.userSex">
-                                     <Radio :label="0">男</Radio>
-                                     <Radio :label="1">女</Radio>
-                                     <Radio :label="2">保密</Radio>
-                                    </RadioGroup>
+                                    <Input name="nickname" class="inputtext" type="text" v-model="password1"  @on-blur="validateUser2()"/>
+                                    <span style="position:absolute;left:63%;line-height: 32px;color: red">{{errmsg2}}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top" width="12%">出生年月</td>
-                                 <td valign="top">
-                                <Row>
-                                    <Col span="11">
-                                        <DatePicker type="date" placeholder="Select date"
-                                                    v-model="formItem.userBirth" @on-change="formItem.userBirth=$event"></DatePicker>
-                                    </Col>
-                                </Row>
-                                 </td>
+                                <td valign="top" width="12%">新的密码</td>
+                                <td valign="top">
+                                    <Input name="nickname" class="inputtext" type="text" v-model="password2" @on-blur="validatePass()"/>
+                                    <span style="position:absolute;left:63%;line-height: 32px;color: red">{{errmsg3}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" width="12%">再输入一次</td>
+                                <td valign="top">
+                                    <Input name="nickname" class="inputtext" type="text" v-model="passagain" @on-blur="validatePass2()"/>
+                                    <span style="position:absolute;left:63%;line-height: 32px;color: red">{{errmsg4}}</span>
+                                </td>
                             </tr>
 
                             <tr>
-                                <td valign="top" width="12%">签名</td>
-                                <td valign="top">
-                                    <input name="nickname" class="inputtext" type="text" v-model="formItem.userQianming">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" width="12%">自我介绍	</td>
-                                <td valign="top">
-                                    <textarea v-model="formItem.userDes" name="nickname" class="inputtext quick" :rows="4" :cols="12" type="textarea">
-                                    </textarea>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td valign="top" width="12%"></td>
                                 <td>
-                                    <Button class="button1" @click="update">保存修改</Button>
+                                    <Button class="button1" @click="update()">保存修改</Button>
                                 </td>
                             </tr>
                             </tbody>
@@ -132,10 +120,9 @@
 <script>
     import axios from 'axios'
     export default {
-        name: "personal",
+        name: "reset",
         data() {
             return {
-                type: '',
                 formItem: {
                     userName: '',
                     userBirth: '',
@@ -144,27 +131,100 @@
                     userQianming:''
 
                 },
-                sex: ''
+                email:'',
+                password1:'',
+                password2:'',
+                passagain:'',
+                errmsg1:'',
+                errmsg2:'',
+                errmsg3:'',
+                errmsg4:'',
             }
         },
 
         methods: {
-            update() {
-                axios.post("http://localhost:8090/bangumi/user/update", {
-                    userId: 1,
-                    name:this.formItem.userName,
-                    sex:this.formItem.userSex,
-                    birth:this.formItem.userBirth,
-                    qianming:this.formItem.userQianming,
-                    des:this.formItem.userDes,
+            validateEmail(){
+                let valid=true;
+                if (this.email==''){
+                    this.errmsg1='邮箱不能为空';
+                    valid=false;
+                }
 
-                }).then((res) => {
-                    console.log(res)
-                    if (res.data){
-                        alert("修改成功")
+                if (valid == true)
+                    this.errmsg1= '';
+                return valid;
+            },
+            validateUser2(){
+                let valid=true;
+                if (this.password1==''){
+                    this.errmsg2='密码不能为空';
+                    valid=false;
+                }
 
+                if (valid == true)
+                    this.errmsg2= '';
+                return valid;
+            },
+
+            validatePass(){
+                let valid=true;
+                if (this.password2==''){
+                    this.errmsg3='密码不能为空';
+                    valid=false;
+                }
+                else {
+                    var reg=new RegExp(/^\w{6,16}$/)
+                    valid=reg.test(this.password2);
+                    if (!valid)
+                        this.errmsg3='密码需为6-16位字符'
+                }
+                if (valid)
+                    this.errmsg3='';
+                return valid;
+            },
+            validatePass2(){
+                let valid=true;
+                if (this.passagain==""){
+                    valid=false;
+                    this.errmsg4='请输入确认密码';
+                }
+                else {
+                    if (this.passagain!=this.password2){
+                        valid=false;
+                        this.errmsg4="两次密码不一致"
                     }
-                })
+                }
+                if (valid)
+                    this.errmsg4='';
+                return valid;
+            },
+            validate(){
+                let validate1 = this.validateEmail();
+                let validate4 = this.validateUser2();
+                let validate2 = this.validatePass();
+                let validate3 = this.validatePass2();
+                return validate1&&validate2&&validate3&&validate4;
+            },
+            update() {
+                if (this.validate()) {
+                    axios.post("http://localhost:8090/bangumi/user/uppass", {
+                        userId: 1,
+                        email: this.email,
+                        password1: this.password1,
+                        password2: this.password2
+                    }).then((res) => {
+                        if (res.data){
+                            this.$Message.success('Success!');
+                            location. reload()
+                        }
+                        else {
+                            this.$Message.success('请检查邮箱或密码是否正确!');
+                        }
+
+                    })
+                }else {
+                    this.$Message.success('请完善信息!');
+                }
             }
         },
 
@@ -172,10 +232,10 @@
             axios.post("http://localhost:8090/bangumi/user/getuser", {
                 userId: 1,
             }).then((res) => {
-                    this.formItem=res.data;
-                    console.log(res.data)
+                this.formItem=res.data;
+                console.log(res.data)
 
-                })
+            })
         },
     }
 </script>
@@ -392,7 +452,7 @@
 
     .inputtext {
         font-size: 15px;
-        padding: 5px 5px;
+        /*padding: 5px 5px;*/
         line-height: 22px;
         width: 100%;
         border-radius: 5px;

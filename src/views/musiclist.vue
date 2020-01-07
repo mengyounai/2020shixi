@@ -330,7 +330,8 @@
                 axios.post("http://localhost:8090/bangumi/music/collect", {
                     userId: 1,
                     musicId:musicInfo2.musicId,
-                    code:this.type
+                    code:this.type,
+                    comment:this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
                 })

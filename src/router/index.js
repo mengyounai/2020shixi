@@ -11,6 +11,8 @@ import animedetail from '../views/animedetail'
 import bookdetail from '../views/bookdetail'
 import musicdetail from '../views/musicdetail'
 import test from '../views/test'
+import reset from '../views/reset'
+import search from '../views/search'
 
 
 Vue.use(VueRouter)
@@ -71,6 +73,17 @@ const routes = [
         name: 'musicdetail',
         component: musicdetail
     },
+    {
+        path: '/reset',
+        name: 'reset',
+        component: reset
+    },
+    {
+        path: '/search',
+        name: 'search',
+        component: search
+    },
+
   {
     path: '/about',
     name: 'about',
