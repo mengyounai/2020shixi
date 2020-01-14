@@ -5,16 +5,16 @@
                 <img src="../images/logo1.png">
                 <ul class="ul1">
                     <li>
-                        <a href="#">动画</a>
+                        <a href="http://localhost:8080/animelist">动画</a>
                     </li>
                     <li>
-                        <a href="#">书籍</a>
+                        <a href="http://localhost:8080/booklist">书籍</a>
                     </li>
                     <li>
                         <a href="#">游戏</a>
                     </li>
                     <li>
-                        <a href="#">音乐</a>
+                        <a href="http://localhost:8080/musiclist">音乐</a>
                     </li>
                     <li>
                         <a href="#">三次元</a>
@@ -22,7 +22,7 @@
                 </ul>
                 <ul class="ul2">
                     <li>
-                        <a href="#">人物</a>
+                        <a href="http://localhost:8080/peoplelist">人物</a>
                     </li>
                     <li>
                         <a href="#">超展开</a>
@@ -37,19 +37,21 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
-                        <Button icon="ios-search"></Button>
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
+                            <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -125,7 +127,7 @@
                                         </ul>
                                         <span style="color: rgba(17,56,255,0.82)" v-show="!animeInfo.show3">
                                             我{{msg}}这部动漫
-                                            <a class="collectModify" >
+                                            <a class="collectModify">
                                                 <a @click="modal1 = true">修改</a>&nbsp
                                                 <a @click="del()">删除</a>
                                             </a>
@@ -143,8 +145,8 @@
                                             <div>
                                                 <small class="grey">Bangumi Game Ranked:</small>
                                             </div>
-                                            <p class="rateinfo" @click="doclick" >
-                                            <Rate class="rateinfo1" allow-half v-model="rate" />
+                                            <p class="rateinfo" @click="doclick">
+                                                <Rate class="rateinfo1" allow-half v-model="rate"/>
 
                                             </p>
                                             <span class="span1">{{rate}}分</span>
@@ -191,13 +193,14 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+animeInfo.name"
+                                                <Modal class="model1" v-model="modal1" draggable scrollable
+                                                       :title="'收藏'+animeInfo.name"
                                                        @on-ok="ok(animeInfo)"
                                                        @on-cancel="cancel">
                                                     <div class="window">
                                                         <div class="box1">
                                                             <form>
-                                                                <div class="type" >
+                                                                <div class="type">
                                                                     <RadioGroup v-model="animeInfo.collectStatus">
                                                                         <Radio :label="1">在看</Radio>
                                                                         <Radio :label="2">看过</Radio>
@@ -209,7 +212,9 @@
                                                                 <div class="cell">
                                                                     <p class="tip">
                                                                         <label for="comment">吐槽 (简评，最多200字):</label></p>
-                                                                    <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
+                                                                    <textarea v-model="comment" name="comment"
+                                                                              id="comment" cols="32" rows="3"
+                                                                              class="quick"></textarea>
                                                                 </div>
                                                             </form>
 
@@ -229,16 +234,20 @@
                             <h2 class="subtitle">角色介绍</h2>
                             <div>
                                 <ul class="ul7">
-                                    <li class="user" v-for="(item,index) in peoInfo.slice(0, 9)" :info="item" :key="index">
+                                    <li class="user" v-for="(item,index) in peoInfo.slice(0, 9)" :info="item"
+                                        :key="index">
                                         <div class="userContainer">
-                                           <strong>
-                                               <a class="a2">
+                                            <strong>
+                                                <a class="a2">
+                                                    <router-link class="list1" :to="{name:'peopledetail',params:{id:item.peopleId}}">
                                                    <span class="userimg">
                                                        <span class="span2"><img :src="item.peopleIcon"></span>
-                                                       <span class="span3"><span style="color:rgba(27,27,27,0.7)">主角:</span>{{item.peopleName}}</span>
+                                                       <span class="span3"><span
+                                                               style="color:rgba(27,27,27,0.7)">主角:</span>{{item.peopleName}}</span>
                                                    </span>
-                                               </a>
-                                           </strong>
+                                                    </router-link>
+                                                </a>
+                                            </strong>
                                         </div>
                                     </li>
                                 </ul>
@@ -248,17 +257,17 @@
                         <div class="section">
                             <h2 class="subtitle">吐槽箱</h2>
                             <div class="comment-box">
-                                    <div class="item" v-for="(item,index) in dInfo.slice(0, 4)" :info="item"
-                                         :key="index">
-                                        <a class="a1"><span><img class="img3" :src=item.userIcon> </span></a>
-                                        <div class="text-main">
-                                            <div class="text">
-                                                <a class="l">{{item.userName}}</a>
-                                                <small class="grey">@ 2019-12-21 21:04</small>
-                                                <p>{{item.commentDescription}}</p>
-                                            </div>
+                                <div class="item" v-for="(item,index) in dInfo.slice(0, 4)" :info="item"
+                                     :key="index">
+                                    <a class="a1"><span><img class="img3" :src=item.userIcon> </span></a>
+                                    <div class="text-main">
+                                        <div class="text">
+                                            <a class="l">{{item.userName}}</a>
+                                            <small class="grey">@ 2019-12-21 21:04</small>
+                                            <p>{{item.commentDescription}}</p>
                                         </div>
                                     </div>
+                                </div>
 
 
                             </div>
@@ -273,6 +282,7 @@
 
 <script>
     import axios from 'axios'
+
     export default {
         name: "animedetail",
         data() {
@@ -286,13 +296,15 @@
                 count4: '5',
                 count5: '5',
                 sum: '20',
-                animeInfo:[],
-                rate:0,
-                modal1:false,
-                comment:'',
-                type:'',
-                dInfo:[],
-                peoInfo:[],
+                animeInfo: [],
+                rate: 0,
+                modal1: false,
+                comment: '',
+                type: '',
+                dInfo: [],
+                peoInfo: [],
+                searchInfo: '',
+                userInfo: [],
             }
         },
         computed: {
@@ -341,119 +353,138 @@
                     return a;
                 }
             },
-            msg(){
-                var msg='';
-                if (this.animeInfo.collectStatus==1){
-                    msg='在看'
-                }else if (this.animeInfo.collectStatus==2) {
-                    msg='看过'
-                }else if (this.animeInfo.collectStatus==3) {
-                    msg='想看'
-                }else if (this.animeInfo.collectStatus==4) {
-                    msg='搁置'
-                }else if (this.animeInfo.collectStatus==5) {
-                    msg='抛弃'
+            msg() {
+                var msg = '';
+                if (this.animeInfo.collectStatus == 1) {
+                    msg = '在看'
+                } else if (this.animeInfo.collectStatus == 2) {
+                    msg = '看过'
+                } else if (this.animeInfo.collectStatus == 3) {
+                    msg = '想看'
+                } else if (this.animeInfo.collectStatus == 4) {
+                    msg = '搁置'
+                } else if (this.animeInfo.collectStatus == 5) {
+                    msg = '抛弃'
                 }
                 return msg;
             }
         },
-        methods:{
+        methods: {
 
             doclick() {
                 axios.post("http://localhost:8090/bangumi/anime/rateup", {
                     animeId: this.animeInfo.animeId,
-                    userId:1,
-                    score:this.rate,
+                    userId: this.userInfo.userId,
+                    score: this.rate,
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/anime/rate", {
                         animeId: this.animeInfo.animeId
                     }).then((res) => {
-                        this.count1=res.data.count1;
-                        this.count2=res.data.count2;
-                        this.count3=res.data.count3;
-                        this.count4=res.data.count4;
-                        this.count5=res.data.count5;
-                        this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
+                        this.count1 = res.data.count1;
+                        this.count2 = res.data.count2;
+                        this.count3 = res.data.count3;
+                        this.count4 = res.data.count4;
+                        this.count5 = res.data.count5;
+                        this.sum = this.count1 + this.count2 + this.count3 + this.count4 + this.count5
                     })
                     console.log(res)
 
                 })
             },
-            ok (animeInfo) {
+            ok(animeInfo) {
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
-                    userId: 1,
-                    animeId:animeInfo.animeId,
-                    code:this.animeInfo.collectStatus,
-                    comment:this.comment
+                    userId: this.userInfo.userId,
+                    animeId: animeInfo.animeId,
+                    code: this.animeInfo.collectStatus,
+                    comment: this.comment
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/anime/discuss", {
                         animeId: this.animeInfo.animeId
                     }).then((res) => {
-                        this.dInfo=res.data;
+                        this.dInfo = res.data;
                     })
                     this.$Message.info('Clicked ok');
-                    location. reload()
+                    location.reload()
 
                 })
 
             },
-            cancel () {
+            cancel() {
                 this.$Message.info('Clicked cancel');
             },
 
             del() {
-                if (confirm("是否删除")){
+                if (confirm("是否删除")) {
                     axios.post("http://localhost:8090/bangumi/anime/delcollect", {
-                        userId: 1,
+                        userId: this.userInfo.userId,
                         animeId: this.animeInfo.animeId,
-                        code:0,
+                        code: 0,
                     }).then((res) => {
-                        location. reload()
+                        location.reload()
                     })
                 }
-            }
+            },
+            logout() {
+                var a = confirm("是否退出？")
+                if (a) {
+                    this.$cookieStore.delCookie('username');
+                    this.$router.push("/login")
+                }
+
+            },
         },
-        created:function () {
+        created: function () {
             var id = this.$route.params.id
 
             if (id == null) {
                 id = this.animeInfo.animeId
             }
 
-            axios.post("http://localhost:8090/bangumi/anime/detail", {
-                userId:1,
-                animeId: id
-            }).then((res) => {
-                this.animeInfo=res.data;
-                console.log(res.data)
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
 
-            })
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo = res.data
+                    console.log(res.data)
+                    axios.post("http://localhost:8090/bangumi/anime/detail", {
+                        userId: this.userInfo.userId,
+                        animeId: id
+                    }).then((res) => {
+                        this.animeInfo = res.data;
+                        console.log(res.data)
+                        axios.post("http://localhost:8090/bangumi/anime/rate", {
+                            animeId: id
+                        }).then((res) => {
+                            this.count1 = res.data.count1;
+                            this.count2 = res.data.count2;
+                            this.count3 = res.data.count3;
+                            this.count4 = res.data.count4;
+                            this.count5 = res.data.count5;
+                            this.sum = this.count1 + this.count2 + this.count3 + this.count4 + this.count5
+                            console.log(res.data)
+                        })
 
-            axios.post("http://localhost:8090/bangumi/anime/rate", {
-                animeId: id
-            }).then((res) => {
-                this.count1=res.data.count1;
-                this.count2=res.data.count2;
-                this.count3=res.data.count3;
-                this.count4=res.data.count4;
-                this.count5=res.data.count5;
-                this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
-                console.log(res.data)
-            })
+                        axios.post("http://localhost:8090/bangumi/anime/discuss", {
+                            animeId: id
+                        }).then((res) => {
+                            this.dInfo = res.data;
+                            console.log(res.data)
+                        })
 
-            axios.post("http://localhost:8090/bangumi/anime/discuss", {
-                animeId: id
-            }).then((res) => {
-                this.dInfo=res.data;
-                console.log(res.data)
-            })
+                        axios.post("http://localhost:8090/bangumi/anime/people", {
+                            animeId: id
+                        }).then((res) => {
+                            this.peoInfo = res.data;
+                            console.log(res)
+                        })
+                    })
 
-            axios.post("http://localhost:8090/bangumi/anime/people", {
-                animeId: id
-            }).then((res) => {
-                this.peoInfo=res.data;
-                console.log(res)
-            })
+                })
+
+
+            }
         }
     }
 </script>
@@ -579,13 +610,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/
@@ -703,7 +734,7 @@
         box-shadow: 0 1px 5px #AAA;
     }
 
-    .tip{
+    .tip {
         font-size: 13px;
     }
 
@@ -865,7 +896,7 @@
 
     }
 
-    .rateinfo{
+    .rateinfo {
         position: relative;
     }
 
@@ -877,7 +908,8 @@
     .rateinfo1 >>> .ivu-rate-star {
 
     }
-    .span1{
+
+    .span1 {
         position: absolute;
         left: 85%;
         top: 45%;
@@ -922,11 +954,12 @@
 
     }
 
-    .ul7{
+    .ul7 {
         overflow: hidden;
         margin: 5px 0 0 0;
     }
-    .ul7 li{
+
+    .ul7 li {
         margin: 0 0 10px;
         display: block;
         float: left;
@@ -935,11 +968,12 @@
         position: relative;
         width: 33%;
     }
-    .userContainer{
+
+    .userContainer {
         padding: 0 5px 0 55px;
     }
 
-    .userContainer strong{
+    .userContainer strong {
         font-size: 14px;
         font-weight: normal;
         display: block;
@@ -947,7 +981,7 @@
         padding: 0 0 3px 0;
     }
 
-    .userimg{
+    .userimg {
         margin: 0pt 0pt 0pt -55px;
         cursor: pointer;
         float: left;
@@ -956,7 +990,7 @@
 
     }
 
-    .span2{
+    .span2 {
         width: 48px;
         height: 48px;
         display: inline-block;
@@ -966,7 +1000,7 @@
 
     }
 
-    .span3{
+    .span3 {
         margin-left: 5px;
         border-bottom: 1px solid #EEE;
         font-size: 14px;
@@ -974,7 +1008,6 @@
         color: #0084B4;
         width: 180px;
     }
-
 
     .subtitle {
         font-weight: 300;
@@ -986,7 +1019,6 @@
 
     .comment-box {
         margin: 5px 0;
-
 
     }
 
@@ -1037,17 +1069,17 @@
 
     }
 
-    .comment-box div:nth-of-type(even) span{
+    .comment-box div:nth-of-type(even) span {
         position: absolute;
         /*left: 40%;*/
         margin-left: 100%;
 
     }
-    .comment-box div:nth-of-type(even) .text-main{
+
+    .comment-box div:nth-of-type(even) .text-main {
         position: relative;
         left: 24%;
     }
-
 
     .window {
         /*margin-left: -265px;*/
@@ -1064,23 +1096,25 @@
         /*color: #000;*/
     }
 
-    .box1{
+    .box1 {
         /*padding: 10px 15px;*/
     }
 
-    .ivu-modal-body{
+    .ivu-modal-body {
         padding: 0;
     }
-    .ivu-modal-header{
-        background: rgba(240,145,153,1);
+
+    .ivu-modal-header {
+        background: rgba(240, 145, 153, 1);
         padding: 0px 0px 0px 0px;
 
     }
-    .ivu-modal-header-inner{
+
+    .ivu-modal-header-inner {
         color: white;
     }
 
-    .type{
+    .type {
         margin: 0 0 5px 0;
         font-size: 14px;
         padding: 5px 0 10px 0;
@@ -1088,16 +1122,16 @@
         border-bottom: 1px solid #EEE;
     }
 
-    .type > label:not(:first-child){
+    .type > label:not(:first-child) {
         margin-left: 5px;
     }
 
-    .tip{
+    .tip {
         font-size: 12px;
         color: #666;
     }
 
-    .quick{
+    .quick {
         max-width: 480px;
         font-size: 15px;
         overflow: auto;
@@ -1117,11 +1151,10 @@
     .collectModify a {
 
     }
+
     .collectModify a:hover {
         text-decoration: underline;
     }
-
-
 
 
 </style>

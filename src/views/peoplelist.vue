@@ -5,16 +5,16 @@
                 <img src="../images/logo1.png">
                 <ul class="ul1">
                     <li>
-                        <a href="#">动画</a>
+                        <a href="http://localhost:8080/animelist">动画</a>
                     </li>
                     <li>
-                        <a href="#">书籍</a>
+                        <a href="http://localhost:8080/booklist">书籍</a>
                     </li>
                     <li>
                         <a href="#">游戏</a>
                     </li>
                     <li>
-                        <a href="#">音乐</a>
+                        <a href="http://localhost:8080/musiclist">音乐</a>
                     </li>
                     <li>
                         <a href="#">三次元</a>
@@ -22,7 +22,7 @@
                 </ul>
                 <ul class="ul2">
                     <li>
-                        <a href="#">人物</a>
+                        <a href="http://localhost:8080/peoplelist">人物</a>
                     </li>
                     <li>
                         <a href="#">超展开</a>
@@ -37,19 +37,21 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
-                        <Button icon="ios-search"></Button>
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
+                            <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
-                            <DropdownItem>个人中心</DropdownItem>
+                            <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem ><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -392,15 +394,42 @@
             return {
                 peopleInfo1: [],
                 peopleInfo2: [],
+                searchInfo:'',
+                userInfo:[],
             }
         },
+
+        methods:{
+            logout(){
+                var a=confirm("是否退出？")
+                if(a){
+                    this.$cookieStore.delCookie('username');
+                    this.$router.push("/login")
+                }
+
+            },
+        },
+
         created: function () {
-            axios.get("http://localhost:8090/bangumi/people/list")
-                .then((res) => {
-                    this.peopleInfo1 = res.data[0].peopleVOList
-                    this.peopleInfo2 = res.data[1].peopleVOList
-                    console.log(this.peopleInfo1)
+            console.log(this.$cookieStore.getCookie('username'))
+
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
+
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo = res.data
+                    console.log(res.data)
+                    axios.get("http://localhost:8090/bangumi/people/list")
+                        .then((res) => {
+                            this.peopleInfo1 = res.data[0].peopleVOList
+                            this.peopleInfo2 = res.data[1].peopleVOList
+                            console.log(this.peopleInfo1)
+                        })
                 })
+            }
+
         }
 
     }
@@ -528,13 +557,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/

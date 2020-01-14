@@ -5,16 +5,16 @@
                 <img src="../images/logo1.png">
                 <ul class="ul1">
                     <li>
-                        <a href="#">动画</a>
+                        <a href="http://localhost:8080/animelist">动画</a>
                     </li>
                     <li>
-                        <a href="#">书籍</a>
+                        <a href="http://localhost:8080/booklist">书籍</a>
                     </li>
                     <li>
                         <a href="#">游戏</a>
                     </li>
                     <li>
-                        <a href="#">音乐</a>
+                        <a href="http://localhost:8080/musiclist">音乐</a>
                     </li>
                     <li>
                         <a href="#">三次元</a>
@@ -22,7 +22,7 @@
                 </ul>
                 <ul class="ul2">
                     <li>
-                        <a href="#">人物</a>
+                        <a href="http://localhost:8080/peoplelist">人物</a>
                     </li>
                     <li>
                         <a href="#">超展开</a>
@@ -37,19 +37,21 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
-                        <Button icon="ios-search"></Button>
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
+                            <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem ><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -271,6 +273,8 @@
                 type:'',
                 dInfo:[],
                 peoInfo:[],
+                searchInfo:'',
+                userInfo:[],
             }
         },
         computed: {
@@ -341,7 +345,7 @@
             doclick() {
                 axios.post("http://localhost:8090/bangumi/music/rateup", {
                     musicId: this.musicInfo.musicId,
-                    userId:2,
+                    userId:this.userInfo.userId,
                     score:this.rate,
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/music/rate", {
@@ -360,7 +364,7 @@
             },
             ok (musicInfo) {
                 axios.post("http://localhost:8090/bangumi/music/collect", {
-                    userId: 1,
+                    userId: this.userInfo.userId,
                     musicId:musicInfo.musicId,
                     code:this.musicInfo.collectStatus,
                     comment:this.comment
@@ -382,14 +386,22 @@
             del() {
                 if (confirm("是否删除")){
                     axios.post("http://localhost:8090/bangumi/music/delcollect", {
-                        userId: 1,
+                        userId: this.userInfo.userId,
                         musicId: this.musicInfo.musicId,
                         code:0,
                     }).then((res) => {
                         location. reload()
                     })
                 }
-            }
+            },
+            logout(){
+                var a=confirm("是否退出？")
+                if(a){
+                    this.$cookieStore.delCookie('username');
+                    this.$router.push("/login")
+                }
+
+            },
         },
         created:function () {
             var id = this.$route.params.id
@@ -397,35 +409,47 @@
             if (id == null) {
                 id = this.musicInfo.musicId
             }
+            console.log(this.$cookieStore.getCookie('username'))
 
-            axios.post("http://localhost:8090/bangumi/music/detail", {
-                userId:1,
-                musicId: id
-            }).then((res) => {
-                this.musicInfo=res.data;
-                console.log(res.data)
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
 
-            })
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo = res.data
+                    console.log(res.data)
+                    axios.post("http://localhost:8090/bangumi/music/detail", {
+                        userId: this.userInfo.userId,
+                        musicId: id
+                    }).then((res) => {
+                        this.musicInfo = res.data;
+                        console.log(res.data)
 
-            axios.post("http://localhost:8090/bangumi/music/rate", {
-                musicId: id
-            }).then((res) => {
-                this.count1=res.data.count1;
-                this.count2=res.data.count2;
-                this.count3=res.data.count3;
-                this.count4=res.data.count4;
-                this.count5=res.data.count5;
-                this.sum=this.count1+this.count2+this.count3+this.count4+this.count5
-                console.log(res.data)
-            })
+                    })
 
-            axios.post("http://localhost:8090/bangumi/music/discuss", {
-                musicId: id
-            }).then((res) => {
-                this.dInfo=res.data;
-                console.log(res.data)
-            })
+                    axios.post("http://localhost:8090/bangumi/music/rate", {
+                        musicId: id
+                    }).then((res) => {
+                        this.count1 = res.data.count1;
+                        this.count2 = res.data.count2;
+                        this.count3 = res.data.count3;
+                        this.count4 = res.data.count4;
+                        this.count5 = res.data.count5;
+                        this.sum = this.count1 + this.count2 + this.count3 + this.count4 + this.count5
+                        console.log(res.data)
+                    })
 
+                    axios.post("http://localhost:8090/bangumi/music/discuss", {
+                        musicId: id
+                    }).then((res) => {
+                        this.dInfo = res.data;
+                        console.log(res.data)
+                    })
+                })
+
+
+            }
         }
     }
 </script>
@@ -551,13 +575,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/

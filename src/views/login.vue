@@ -43,18 +43,6 @@
                         </router-link>
                     </form>
                 </div>
-                <div class="img1">
-                    <Dropdown>
-                        <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
-                        </a>
-                        <DropdownMenu slot="list">
-                            <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
-                            <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
             </div>
         </div>
         <div class="center">
@@ -62,44 +50,66 @@
                 <h1 style="color: #FF6699; font-size: 30px; padding-left: 40px; padding-top: 20px;">登录至Bangumi</h1>
 
                 <h1 style="padding-left: 40px; padding-top: 20px;">用户名</h1>
-                <form role="form" method="post" action="/bangumi/user/common/login">
-                    <input type="text" name="userEmail" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
+                    <input v-model="username" type="text" name="userName" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
                     <h1 style="padding-left: 40px; padding-top: 20px;">你的密码</h1>
-                    <input type="text" name="userPassword" style="margin-left: 40px; margin-top: 10px;width: 80%; border: 1px solid #ccc;
+                    <input v-model="password" type="text" name="userPassword" style="margin-left: 40px; margin-top: 10px;width: 80%; border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
                     <br>
-                    <input type="submit" value="登录" style="background-color: #FF6699;color: white;margin-left: 40px;
+                    <button @click="dologin()" style="background-color: #FF6699;color: white;margin-left: 40px;
                    margin-top: 20px; width: 100px; height: 45px; padding: auto;border-radius: 10px;">
-                </form>
+                        登录
+                    </button>
             </div>
             <div style="width:1px;height:600px;float:left;background:#f0f0f0;margin-left:10px;margin-right:10px;"></div>
             <div class="center2" style="text-align: center">
                 <h1 style="color:#0099FF;padding-top: 90px;">还没有Bangumi账户？</h1>
-                <input type="submit" value="立即注册" style="background-color: #FF6699;color: white;
-                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;" onclick="window.location.href='register.html'">
+                <router-link class="list1" :to="{name:'register'}">
+                    <input type="submit" value="立即注册" style="background-color: #FF6699;color: white;
+                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;">
+                </router-link>
                 <h1 style="color:#0099FF; padding-top: 40px;">忘记密码？</h1>
                 <input type="submit" value="重置密码" style="background-color: 	#F0F0F0;color: #B8B8B8;
-                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;" onclick="window.location.href='reset.html'">
+                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;"
+                >
             </div>
-            </div>
+        </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         name: "login",
-        data(){
-            return{
-                searchInfo:''
+        data() {
+            return {
+                searchInfo: '',
+                username: '',
+                password: '',
+            }
+        },
+        methods: {
+            dologin() {
+                axios.post("http://localhost:8090/bangumi/user/login", {
+                    username: this.username,
+                    password: this.password
+                }).then((res) => {
+                    if (res.data){
+                        this.$Message.success('登录成功!');
+                        this.$cookieStore.setCookie( 'username' ,this.username,86400);
+                        this.$router.push('index')
+                    }else {
+                        this.$Message.success('登录失败!请确认用户名或密码是否正确');
+                    }
+                })
             }
         }
     }
@@ -112,8 +122,10 @@
         /*border: 1px solid black;*/
     }
 
-    h1{font-size:14px; font-weight: 900;}
-
+    h1 {
+        font-size: 14px;
+        font-weight: 900;
+    }
 
     .header {
         border-bottom: 1px solid rgba(6, 17, 12, 0.25);
@@ -240,7 +252,22 @@
 
     /*分割线*/
 
-    .center{width: 50%; height: 600px; margin: auto; border: 1px solid #F0F0F0;}
-    .center1{width: 66%; height:600px; float: left;}
-    .center2{width: 30%; height:600px; float: right;}
+    .center {
+        width: 50%;
+        height: 600px;
+        margin: auto;
+        border: 1px solid #F0F0F0;
+    }
+
+    .center1 {
+        width: 66%;
+        height: 600px;
+        float: left;
+    }
+
+    .center2 {
+        width: 30%;
+        height: 600px;
+        float: right;
+    }
 </style>

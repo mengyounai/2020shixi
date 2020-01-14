@@ -61,35 +61,35 @@
             <div class="center1">
                 <h1 style="color: #FF6699; font-size: 30px; padding-left: 40px; padding-top: 10px;">注册成为Bangumi会员</h1>
                 <h1 style="padding-left: 40px; padding-top: 10px;">你的电子邮箱</h1>
-                <input v-model="email" @on-blur="validateEmail()" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
+                <input v-model="email" @on-blur="validateEmail()" placeholder="请绑定您的邮箱" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
                 <h1 style="padding-left: 40px; padding-top: 10px;">你的用户名</h1>
-                <input v-model="username" @on-blur="validateUser()" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
+                <input v-model="username" @on-blur="validateUser()" placeholder="请输入用户名" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
                 <h1 style="padding-left: 40px; padding-top: 10px;">你的密码</h1>
-                <input v-model="password1" @on-blur="validatePass()" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
+                <input v-model="password1" @on-blur="validatePass()" placeholder="密码为位数为6-16" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
                 <h1 style="padding-left: 40px; padding-top: 10px;">再次确认你的密码</h1>
-                <input v-model="password2" @on-blur="validatePass2()" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
+                <input v-model="password2" @on-blur="validatePass2()" placeholder="确认密码" type="text" style="margin-left: 40px; margin-top: 10px; width: 80%;border: 1px solid #ccc;
                    padding: 7px 0px;border-radius: 3px;padding-left:5px;
                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
                    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
                    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s">
 
-                <button @click="doregister()" style="background-color: #FF6699;color: white;margin-left: 40px;
+                <button @click="doregister()"  style="background-color: #FF6699;color: white;margin-left: 40px;
                    margin-top: 10px; width: 100px; height: 45px; padding: auto;border-radius: 10px;">
                     注册
                 </button>
@@ -98,8 +98,10 @@
             <div style="width:1px;height:1000px;float:left;background:#f0f0f0;margin-left:10px;margin-right:10px;"></div>
             <div class="center2" style="text-align: center">
                 <h1 style="color:#0099FF; padding-top: 90px;">已经注册过Bangumi账户？</h1>
+                <router-link class="list1" :to="{name:'login'}">
                 <input type="submit" value="立即登录" style="background-color: #FF6699;color: white;
-                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;" onclick="window.location.href='login.html'">
+                   margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;">
+                </router-link>
                 <h1 style="color:#0099FF; padding-top: 40px;">忘记密码？</h1>
                 <input type="submit" value="重置密码" style="background-color: 	#F0F0F0;color: #B8B8B8;
                    margin-top: 20px; width: 100px; height: 40px; padding: auto;border-radius: 5px;" onclick="window.location.href='reset.html'">
@@ -198,6 +200,8 @@
                         if (res.data){
                             this.$Message.success('Success!');
                             this.$router.push("/login")
+                        }else {
+                            this.$Message.success('用户名已存在!');
                         }
                     })
                 }else {

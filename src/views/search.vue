@@ -37,19 +37,21 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
-                        <Button icon="ios-search"></Button>
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
+                            <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem ><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -294,7 +296,8 @@
                 cls3:'',
                 show1:true,
                 show2:false,
-                show3:false
+                show3:false,
+                userInfo:[],
             }
         },
         methods: {
@@ -323,7 +326,7 @@
 
             ok(animeInfo2) {
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
-                    userId: 1,
+                    userId: this.userInfo.userId,
                     animeId: animeInfo2.animeId,
                     code: this.type,
                     comment: this.comment
@@ -369,7 +372,7 @@
             },
             dosearch() {
                 axios.post("http://localhost:8090/bangumi/search/search", {
-                    userId: 1,
+                    userId: this.userInfo.userId,
                     searchInfo: this.searchInfo,
                 }).then((res) => {
                     this.animeInfo = res.data.searchVO.animeVOList
@@ -394,18 +397,32 @@
             if (info == null) {
                 info = this.searchInfo
             }
-            axios.post("http://localhost:8090/bangumi/search/search", {
-                userId: 1,
-                searchInfo: info,
-            }).then((res) => {
-                this.animeInfo=res.data.searchVO.animeVOList
-                this.bookInfo=res.data.searchVO.bookVOList
-                this.musicInfo=res.data.searchVO.musicVOList
-                this.showlist=this.animeInfo
-                this.searchInfo=info
-                console.log("搜索信息"+info)
-                console.log(res.data)
-            })
+
+            console.log(this.$cookieStore.getCookie('username'))
+
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
+
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo = res.data
+                    console.log(res.data)
+                    axios.post("http://localhost:8090/bangumi/search/search", {
+                        userId: this.userInfo.userId,
+                        searchInfo: info,
+                    }).then((res) => {
+                        this.animeInfo=res.data.searchVO.animeVOList
+                        this.bookInfo=res.data.searchVO.bookVOList
+                        this.musicInfo=res.data.searchVO.musicVOList
+                        this.showlist=this.animeInfo
+                        this.searchInfo=info
+                        console.log("搜索信息"+info)
+                        console.log(res.data)
+                    })
+                })
+            }
+
         }
     }
 </script>
@@ -532,13 +549,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/

@@ -46,12 +46,12 @@
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem ><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -62,8 +62,10 @@
                 <div class="content1-1">
                     <div class="img2">
                         <div class="content1-1-1">
-                            <h1 style="font-size:18px;line-height: 30px;"><a class="a1">ACG丶由乃</a></h1>
+                            <h1 style="font-size:18px;line-height: 30px;"><a class="a1">{{userInfo.userName}}</a></h1>
                         </div>
+                        <img class="img3" :src="userInfo.userIcon">
+
                     </div>
                 </div>
                 <div class="content1-2">
@@ -91,7 +93,9 @@
                             </div>
                             <div class="content2-header-2">
                                 <a class="a2">
+                                    <router-link class="list1" :to="{name:'personal'}">
                                     <span class="span3">编辑</span>
+                                    </router-link>
                                 </a>
                             </div>
                         </div>
@@ -101,8 +105,8 @@
                                     <li class="title"><h2><a>我的动画</a></h2></li>
                                     <li><a>{{animeInfo1.length}}部在看</a></li>
                                     <li><a>{{animeInfo2.length}}部看过</a></li>
-                                    <li><a>2部想看</a></li>
-                                    <li><a>10部搁置</a></li>
+                                    <li><a>0部想看</a></li>
+                                    <li><a>0部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
@@ -152,8 +156,8 @@
                                     <li class="title"><h2><a>我的书籍</a></h2></li>
                                     <li><a>{{bookInfo1.length}}部在看</a></li>
                                     <li><a>{{bookInfo2.length}}部看过</a></li>
-                                    <li><a>2部想看</a></li>
-                                    <li><a>10部搁置</a></li>
+                                    <li><a>0部想看</a></li>
+                                    <li><a>0部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
@@ -205,8 +209,8 @@
                                     <li class="title"><h2><a>我的音乐</a></h2></li>
                                     <li><a>{{musicInfo1.length}}部在听</a></li>
                                     <li><a>{{musicInfo2.length}}部听过</a></li>
-                                    <li><a>2部想听</a></li>
-                                    <li><a>10部搁置</a></li>
+                                    <li><a>0部想听</a></li>
+                                    <li><a>0部搁置</a></li>
                                 </ul>
                             </div>
                             <div class="content2-content-2">
@@ -302,32 +306,17 @@
                         </div>
                         <div class="content2-right-header2">
                             <h2 class="h2">/ 我收藏的人物</h2>
-                            <div style="border: 1px solid rgba(119, 119, 119, 0.1);padding: 0 10px 10px 10px;box-shadow:0px 5px 10px rgba(0, 0, 0, 0.09)">
+                            <div v-show="show10" style="border: 1px solid rgba(119, 119, 119, 0.1);padding: 0 10px 10px 10px;box-shadow:0px 5px 10px rgba(0, 0, 0, 0.09)">
                                 <ul class="ul8">
-                                    <li>
+                                    <li v-for="(item,index) in peopleInfo.slice(0, 4)" :info="item" :key="index">
+                                        <router-link class="list1" :to="{name:'peopledetail',params:{id:item.peopleId}}">
                                         <a>
-                                            <img src="../images/头像2.jpg">
-                                            <p class="name2">菲林洛斯特</p>
+                                            <img :src="item.peopleIcon">
+                                            <p class="name2">{{item.name}}</p>
                                         </a>
+                                        </router-link>
                                     </li>
-                                    <li>
-                                        <a>
-                                            <img src="../images/头像3.jpg">
-                                            <p class="name2">陌上幽梦</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <img src="../images/头像4.jpg">
-                                            <p class="name2">タコ焼き大好き</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <img src="../images/头像3.jpg">
-                                            <p class="name2">神户小鸟のfan</p>
-                                        </a>
-                                    </li>
+
                                 </ul>
                                 <div class="clear"></div>
                                 <hr class="board">
@@ -424,47 +413,86 @@
                 show7:true,
                 show8:true,
                 show9:true,
+                show10:true,
                 searchInfo:'',
+                userInfo:[],
+                peopleInfo:''
             }
         },
 
         computed:{
 
         },
+        methods:{
+            logout(){
+                var a=confirm("是否退出？")
+                if(a){
+                    this.$cookieStore.delCookie('username');
+                    this.$router.push("/login")
+                }
+
+            },
+        },
 
         created: function () {
-            axios.post("http://localhost:8090/bangumi/index/collectAll", {
-                userId: 1,
-            }).then((res) => {
-                this.animeInfo1=res.data.animeInfoList1
-                this.animeInfo2=res.data.animeInfoList2
-                this.bookInfo1=res.data.bookInfoList1
-                this.bookInfo2=res.data.bookInfoList2
-                this.musicInfo1=res.data.musicInfoList1
-                this.musicInfo1=res.data.musicInfoList1
 
-                if (this.animeInfo1.length==0){
-                    this.show2=false;
-                }
-                if (this.animeInfo2.length==0){
-                    this.show3=false;
-                }
-                if (this.bookInfo1.length==0){
-                    this.show5=false;
-                }
-                if (this.bookInfo2.length==0){
-                    this.show6=false;
-                }
-                if (this.musicInfo1.length==0){
-                    this.show8=false;
-                }
-                if (this.musicInfo2.length==0){
-                    this.show9=false;
-                }
-                console.log(res.data)
+            console.log(this.$cookieStore.getCookie('username'))
+
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
+
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo=res.data
+                    console.log(res.data)
+
+                    axios.post("http://localhost:8090/bangumi/index/collectAll", {
+                        userId: this.userInfo.userId,
+                    }).then((res) => {
+                        this.animeInfo1=res.data.animeInfoList1
+                        this.animeInfo2=res.data.animeInfoList2
+                        this.bookInfo1=res.data.bookInfoList1
+                        this.bookInfo2=res.data.bookInfoList2
+                        this.musicInfo1=res.data.musicInfoList1
+                        this.musicInfo1=res.data.musicInfoList1
+                        this.peopleInfo=res.data.peopleVOList;
+
+                        if (this.animeInfo1.length==0){
+                            this.show2=false;
+                        }
+                        if (this.animeInfo2.length==0){
+                            this.show3=false;
+                        }
+                        if (this.bookInfo1.length==0){
+                            this.show5=false;
+                        }
+                        if (this.bookInfo2.length==0){
+                            this.show6=false;
+                        }
+                        if (this.musicInfo1.length==0){
+                            this.show8=false;
+                        }
+                        if (this.musicInfo2.length==0){
+                            this.show9=false;
+                        }
+                        if (this.peopleInfo.length==0){
+                            this.show10=false;
+                        }
+                        console.log(res.data)
 
 
-            })
+                    })
+
+                })
+
+
+            }
+
+
+
+
+
         },
 
     }
@@ -592,13 +620,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/
@@ -616,12 +644,18 @@
     .img2 {
         width: 75px;
         height: 75px;
-        background-image: url(../images/头像.jpg);
-        background-repeat: no-repeat;
-        background-size: 110% 110%;
-        background-position: 50% 80%; /*这个是按从左往右，从上往下的百分比位置进行调整*/
+        /*background-image: url(../images/头像.jpg);*/
+
+    }
+    .img3{
+        width: 75px;
+        height: 75px;
+        /*background-repeat: no-repeat;*/
+        /*background-size: 110% 110%;*/
+        /*background-position: 50% 80%; !*这个是按从左往右，从上往下的百分比位置进行调整*!*/
         z-index: 1;
-        position: relative
+        position: relative;
+        margin-top: -40px;
         /*-moz-background-size:100% 100%;*/
     }
 

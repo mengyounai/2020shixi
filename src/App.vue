@@ -8,6 +8,21 @@
   </div>
 </template>
 
+<script>
+    import Vue from 'vue'
+    import {setCookie, getCookie, delCookie} from "./assets/login/cookie";
+    export default {
+        name: "App",
+        beforeMount () {
+            Vue.prototype.$cookieStore = {
+                setCookie,
+                getCookie,
+                delCookie
+            }
+        }
+    }
+</script>
+
 <style>
   li{
     list-style: none;

@@ -37,19 +37,21 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
-                        <Button icon="ios-search"></Button>
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
+                            <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
                     <Dropdown>
                         <a href="javascript:void(0)">
-                            <img class="img1-1" src="../images/头像.jpg">
+                            <img class="img1-1" :src="userInfo.userIcon">
                         </a>
                         <DropdownMenu slot="list">
-                            <DropdownItem>个人中心</DropdownItem>
+                            <DropdownItem><a href="http://localhost:8080/personal">个人中心</a></DropdownItem>
                             <DropdownItem>设置</DropdownItem>
-                            <DropdownItem>退出</DropdownItem>
+                            <DropdownItem ><a @click="logout()">退出</a></DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -279,7 +281,9 @@
                 modal1: false,
                 comment:'',
                 type:'',
-                bookInfo2:[]
+                searchInfo:'',
+                bookInfo2:[],
+                userInfo:[]
             }
         },
         computed: {
@@ -315,7 +319,7 @@
             doclick(item){
                 axios.post("http://localhost:8090/bangumi/book/type", {
                     bookName: item,
-                    userId:1
+                    userId:this.userInfo.userId
                 }).then((res) => {
                     this.bookInfo=res.data;
                     this.showlist=res.data;
@@ -326,7 +330,7 @@
             doclick2(item){
                 axios.post("http://localhost:8090/bangumi/book/time", {
                     time: item,
-                    userId:1
+                    userId:this.userInfo.userId
                 }).then((res) => {
                     this.bookInfo=res.data;
                     this.showlist=res.data;
@@ -335,7 +339,7 @@
             },
             ok (bookInfo2) {
                 axios.post("http://localhost:8090/bangumi/book/collect", {
-                    userId: 1,
+                    userId: this.userInfo.userId,
                     bookId:bookInfo2.bookId,
                     code:bookInfo2.collectStatus,
                     comment:this.comment
@@ -355,39 +359,59 @@
             del(item) {
                 if (confirm("是否删除")){
                     axios.post("http://localhost:8090/bangumi/book/delcollect", {
-                        userId: 1,
+                        userId: this.userInfo.userId,
                         bookId: item.bookId,
                         code:0,
                     }).then((res) => {
                         location. reload()
                     })
                 }
-            }
+            },
+            logout(){
+                var a=confirm("是否退出？")
+                if(a){
+                    this.$cookieStore.delCookie('username');
+                    this.$router.push("/login")
+                }
+
+            },
 
 
         },
 
         created: function () {
-            axios.post("http://localhost:8090/bangumi/book/list", {
-                userId: 1,
-            }).then((res) => {
-                    this.bookInfo = res.data
-                    this.showlist = res.data
+
+            console.log(this.$cookieStore.getCookie('username'))
+
+            if (this.$cookieStore.getCookie('username')) {
+                var username = this.$cookieStore.getCookie('username')
+
+                axios.post("http://localhost:8090/bangumi/user/info", {
+                    username: username,
+                }).then((res) => {
+                    this.userInfo = res.data
                     console.log(res.data)
+                    axios.post("http://localhost:8090/bangumi/book/list", {
+                        userId: this.userInfo.userId,
+                    }).then((res) => {
+                        this.bookInfo = res.data
+                        this.showlist = res.data
+                        console.log(res.data)
+                    })
+
+                    axios.get("http://localhost:8090/bangumi/book/type")
+                        .then((res) => {
+                            this.showlist2 = res.data;
+                            console.log('类型列表:' + res.data)
+                        })
+                    axios.get("http://localhost:8090/bangumi/book/time")
+                        .then((res) => {
+                            this.timelist = res.data;
+                            console.log('时间列表:' + res.data)
+                        })
                 })
 
-            axios.get("http://localhost:8090/bangumi/book/type")
-                .then((res) => {
-                    this.showlist2=res.data;
-                    console.log('类型列表:'+res.data)
-                })
-            axios.get("http://localhost:8090/bangumi/book/time")
-                .then((res) => {
-                    this.timelist=res.data;
-                    console.log('时间列表:'+res.data)
-                })
-
-
+            }
         }
     }
 </script>
@@ -513,13 +537,13 @@
     }
 
     .img1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     .img1-1 {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
 
     /*分割线*/
