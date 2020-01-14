@@ -58,8 +58,8 @@
         <div class="content">
             <div class="content-header">
                 <h1>
-                    <a>{{musicInfo.musicName}}</a>
-                    <small class="grey">TV</small>
+                    <a>{{musicInfo.name}}</a>
+                    <small class="grey">CD</small>
                 </h1>
                 <div class="content-header-1">
                     <ul class="ul3">
@@ -80,21 +80,21 @@
                             <div class="box">
                                 <div class="center">
                                     <a>
-                                        <img class="cover" :src="musicInfo.musicIcon">
+                                        <img class="cover" :src="musicInfo.icon">
                                     </a>
                                 </div>
                                 <ul class="ul4">
                                     <li>
                                         <span class="tip">中文名: </span>
-                                        {{musicInfo.musicName}}
+                                        {{musicInfo.name}}
                                     </li>
                                     <li>
                                         <span class="tip">放送时间: </span>
-                                        {{musicInfo.musicTime}}
+                                        {{musicInfo.time}}
                                     </li>
                                     <li>
                                         <span class="tip">原作: </span>
-                                        <a>{{musicInfo.musicAuthor}}</a>
+                                        <a>{{musicInfo.author}}</a>
                                     </li>
                                     <li>
                                         <span class="tip">价格: </span>
@@ -116,13 +116,20 @@
                                 <div class="rate1">
                                     <h2>收藏盒</h2>
                                     <div class="tab">
-                                        <ul class="ul5">
+                                        <ul class="ul5" v-show="musicInfo.show3">
                                             <li @click="modal1 = true"><a class="thickbox"><span>想看</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>看过</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>在看</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>搁置</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>抛弃</span></a></li>
                                         </ul>
+                                        <span style="color: rgba(17,56,255,0.82)" v-show="!musicInfo.show3">
+                                            我{{msg}}这部动漫
+                                            <a class="collectModify" >
+                                                <a @click="modal1 = true">修改</a>&nbsp
+                                                <a @click="del()">删除</a>
+                                            </a>
+                                        </span>
                                     </div>
                                     <hr class="board">
                                     <div class="rate2">
@@ -139,7 +146,7 @@
                                                 <Rate class="rateinfo1" allow-half v-model="rate" />
 
                                             </p>
-                                            <span class="span1">{{rate}}分</span>
+                                            <span class="span1">{{musicInfo.score}}分</span>
                                             <div class="rate3">
                                                 <div class="rate4">
                                                     <small class="grey"><span property="v:votes">{{sum}}</span> votes
@@ -183,14 +190,14 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+musicInfo.musicName"
+                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+musicInfo.name"
                                                        @on-ok="ok(musicInfo)"
                                                        @on-cancel="cancel">
                                                     <div class="window">
                                                         <div class="box1">
                                                             <form>
                                                                 <div class="type" >
-                                                                    <RadioGroup v-model="type">
+                                                                    <RadioGroup v-model="musicInfo.collectStatus">
                                                                         <Radio :label="1">在看</Radio>
                                                                         <Radio :label="2">看过</Radio>
                                                                         <Radio :label="3">想看</Radio>
@@ -204,9 +211,7 @@
                                                                     <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
                                                                 </div>
                                                             </form>
-
                                                         </div>
-
                                                     </div>
                                                 </Modal>
 
@@ -313,6 +318,21 @@
                     var a = Math.round(this.count5 / this.sum * 100)
                     return a;
                 }
+            },
+            msg(){
+                var msg='';
+                if (this.musicInfo.collectStatus==1){
+                    msg='在看'
+                }else if (this.musicInfo.collectStatus==2) {
+                    msg='看过'
+                }else if (this.musicInfo.collectStatus==3) {
+                    msg='想看'
+                }else if (this.musicInfo.collectStatus==4) {
+                    msg='搁置'
+                }else if (this.musicInfo.collectStatus==5) {
+                    msg='抛弃'
+                }
+                return msg;
             }
         },
         methods:{
@@ -342,7 +362,7 @@
                 axios.post("http://localhost:8090/bangumi/music/collect", {
                     userId: 1,
                     musicId:musicInfo.musicId,
-                    code:this.type,
+                    code:this.musicInfo.collectStatus,
                     comment:this.comment
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/music/discuss", {
@@ -351,6 +371,7 @@
                         this.dInfo=res.data;
                     })
                     this.$Message.info('Clicked ok');
+                    location. reload()
 
                 })
 
@@ -358,6 +379,17 @@
             cancel () {
                 this.$Message.info('Clicked cancel');
             },
+            del() {
+                if (confirm("是否删除")){
+                    axios.post("http://localhost:8090/bangumi/music/delcollect", {
+                        userId: 1,
+                        musicId: this.musicInfo.musicId,
+                        code:0,
+                    }).then((res) => {
+                        location. reload()
+                    })
+                }
+            }
         },
         created:function () {
             var id = this.$route.params.id
@@ -367,6 +399,7 @@
             }
 
             axios.post("http://localhost:8090/bangumi/music/detail", {
+                userId:1,
                 musicId: id
             }).then((res) => {
                 this.musicInfo=res.data;

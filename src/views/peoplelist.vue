@@ -63,7 +63,6 @@
                     <li><a href="#">虚拟角色</a></li>
                     <li><a href="#">现实人物</a></li>
                     <li><a href="#">人物近况</a></li>
-
                 </ul>
             </div>
         </div>
@@ -76,159 +75,18 @@
                         <h2 class="title">近期注目角色</h2>
                         <div>
                             <ul class="ul4">
-                                <li>
-                                    <a>
+                                <li v-for="(item,index) in peopleInfo1.slice(0, 12)" :info="item" :key="index">
+                                    <router-link class="list1" :to="{name:'peopledetail',params:{id:item.peopleId}}">
+                                        <a>
                                         <span class="pictureFrameGroup">
                                             <span class="img">
-                                                <img src="../images/CC头像.jpg">
+                                                <img :src="item.peopleIcon">
                                             </span>
                                             <span class="overlay"></span>
                                         </span>
-                                    </a>
-                                    <a class="a2">C.C.</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/利斯塔头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">莉丝妲黛</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/加藤惠头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">加藤惠</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/牧濑红莉栖头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">牧濑红莉栖</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/雪乃头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">雪之下雪乃</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/古河渚头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">古河渚</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/鲁路修头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">鲁路修</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/CC头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">C.C.</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/利斯塔头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">莉丝妲黛</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/加藤惠头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">加藤惠</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/牧濑红莉栖头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">牧濑红莉栖</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/雪乃头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">雪之下雪乃</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/古河渚头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">古河渚</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/鲁路修头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">鲁路修</a>
+                                        </a>
+                                        <a class="a2">{{item.name}}</a>
+                                    </router-link>
                                 </li>
 
                             </ul>
@@ -240,83 +98,20 @@
                         <h2 class="title">最受欢迎角色</h2>
                         <div>
                             <ul class="ul4">
-                                <li>
-                                    <a>
+                                <li v-for="(item,index) in peopleInfo2.slice(0,7)" :info="item" :key="index">
+                                    <router-link class="list1" :to="{name:'peopledetail',params:{id:item.peopleId}}">
+                                        <a>
                                         <span class="pictureFrameGroup">
                                             <span class="img">
-                                                <img src="../images/CC头像.jpg">
+                                                <img :src="item.peopleIcon">
                                             </span>
                                             <span class="overlay"></span>
                                         </span>
-                                    </a>
-                                    <a class="a2">C.C.</a>
+                                        </a>
+                                        <a class="a2">{{item.name}}</a>
+                                    </router-link>
                                 </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/利斯塔头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">莉丝妲黛</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/加藤惠头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">加藤惠</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/牧濑红莉栖头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">牧濑红莉栖</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/雪乃头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">雪之下雪乃</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/古河渚头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">古河渚</a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <span class="pictureFrameGroup">
-                                            <span class="img">
-                                                <img src="../images/鲁路修头像.jpg">
-                                            </span>
-                                            <span class="overlay"></span>
-                                        </span>
-                                    </a>
-                                    <a class="a2">鲁路修</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -589,8 +384,25 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     export default {
-        name: "peoplelist"
+        name: "peoplelist",
+        data() {
+            return {
+                peopleInfo1: [],
+                peopleInfo2: [],
+            }
+        },
+        created: function () {
+            axios.get("http://localhost:8090/bangumi/people/list")
+                .then((res) => {
+                    this.peopleInfo1 = res.data[0].peopleVOList
+                    this.peopleInfo2 = res.data[1].peopleVOList
+                    console.log(this.peopleInfo1)
+                })
+        }
+
     }
 </script>
 
@@ -848,6 +660,11 @@
         width: 74px;
     }
 
+    .img img {
+        height: 76px;
+        width: 76px;
+    }
+
     .ul4 {
         display: block;
         font-size: 11px;
@@ -901,14 +718,14 @@
         float: left;
     }
 
-    .content-right-1{
+    .content-right-1 {
         border: none;
         padding: 10px 0;
         border-bottom: 1px solid #EEE;
         border-top: 1px solid #FFF;
     }
 
-    .content-right-1 h2{
+    .content-right-1 h2 {
         color: #369CF8;
         font-size: 13px;
         line-height: 13px;
@@ -918,18 +735,18 @@
         margin: 0 0 10px 0;
     }
 
-    .dl1{
+    .dl1 {
         display: inline-block;
         margin: 0pt 0pt 0px;
         width: 64px;
     }
 
-    .dl1 a{
+    .dl1 a {
         color: #0084B4;
         font-size: 12px;
     }
 
-    .dl1 dt{
+    .dl1 dt {
         padding: 0 0 0 8px;
         height: 50px;
         margin: 0pt;
@@ -937,14 +754,14 @@
         text-align: center;
     }
 
-    .dl1 dd{
+    .dl1 dd {
         height: 20px;
         margin: 0px;
         overflow: hidden;
         text-align: center;
     }
 
-    .img2{
+    .img2 {
         width: 48px;
         height: 48px;
         float: left;
@@ -972,16 +789,17 @@
         padding: 15px 10px;
     }
 
-    .ul100 li{
+    .ul100 li {
         display: block;
         float: left;
         width: 25%;
     }
 
-    .ul100 li a{
+    .ul100 li a {
         color: #444;
     }
-    .ul100 li dt{
+
+    .ul100 li dt {
         font-size: 12px;
         font-weight: bold;
         margin-bottom: 3px;
@@ -990,7 +808,8 @@
         width: 177px;
         border-bottom: 1px solid #CCC;
     }
-    .ul100 li dd{
+
+    .ul100 li dd {
         margin-bottom: 0.2em;
         margin-left: 15px;
         font-size: 12px;

@@ -59,13 +59,12 @@
             <div class="content-header">
                 <div class="searchbox">
                     <h1>条目搜索</h1>
-                    <form action="" method="post">
+                    <form>
                         <input name="cat" value="all" type="hidden">
-                        <input value="" name="search_text" class="searchInputL" type="text">
-                        <input class="searchBtnL" title="Search" value="搜索" type="submit">
+                        <input v-model="searchInfo" name="search_text" class="searchInputL" type="text">
+                        <input class="searchBtnL" title="Search" value="搜索" type="button" @click="dosearch()">
                     </form>
                 </div>
-
 
             </div>
             <div class="content-content">
@@ -73,10 +72,10 @@
                     <div class="content-left">
                         <ul class="ul10">
                             <li class="root">条目</li>
-                            <li><a href="http://localhost:8080/search?cat=all" class="selected"><span>全部</span></a></li>
-                            <li><a href="http://localhost:8080/search?cat=1"><span>动画</span></a></li>
-                            <li><a href="http://localhost:8080/search?cat=2"><span>书籍</span></a></li>
-                            <li><a href="http://localhost:8080/search?cat=3"><span>音乐</span></a></li>
+                            <li><a class="selected"><span>全部</span></a></li>
+                            <li :class="cls1" @click="doclick4()"><a><span>动画</span></a></li>
+                            <li :class="cls2" @click="doclick5()"><a><span>书籍</span></a></li>
+                            <li :class="cls3" @click="doclick6()"><a><span>音乐</span></a></li>
                             <li class="root">人物</li>
                         </ul>
                     </div>
@@ -92,11 +91,11 @@
                                 </ul>
                             </div>
                         </div>
-                        <ul class="ul3">
+                        <ul class="ul3" v-show="show1">
                             <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
                                 :key="index">
                                 <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
-                                    <a><img class="cover" :src="item.animeIcon"></a>
+                                    <a><img class="cover" :src="item.icon"></a>
                                 </router-link>
                                 <div class="inner">
                                     <div class="collect">
@@ -107,7 +106,8 @@
                                                               @mouseover="selectStyle (item)"
                                                         >收藏</span>
                                                 </a>
-                                                <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)" @click="doclick3(item)">
+                                                <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)"
+                                                    @click="doclick3(item)">
                                                     <li @click="modal1 = true"><a>想看</a></li>
                                                     <li @click="modal1 = true"><a>看过</a></li>
                                                     <li @click="modal1 = true"><a>在看</a></li>
@@ -118,10 +118,10 @@
                                         </ul>
                                     </div>
                                     <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
-                                        <h3><a>{{item.animeName}}</a></h3>
+                                        <h3><a>{{item.name}}</a></h3>
                                     </router-link>
                                     <p class="info">
-                                        {{item.animeJishu}}话 / {{item.animeTime}} / {{item.animeAuthor}}
+                                        {{item.time}} / {{item.author}}/{{item.jishu}}话
                                     </p>
                                     <p class="rateinfo">
                                             <span><Rate class="rateinfo1" disabled
@@ -133,13 +133,98 @@
                                 </div>
                             </li>
                         </ul>
-                        <Modal class="model1"  v-model="modal1" id="color"  draggable scrollable :title="'收藏'+animeInfo2.animeName"
+                        <ul class="ul3" v-show="show2">
+                            <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
+                                :key="index" >
+                                <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
+                                    <a><img class="cover" :src="item.icon"></a>
+                                </router-link>
+                                <div class="inner">
+                                    <div class="collect">
+                                        <ul class="ul9">
+                                            <li>
+                                                <a>
+                                                        <span v-show="item.show"
+                                                              @mouseover="selectStyle (item)"
+                                                        >收藏</span>
+                                                </a>
+                                                <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)"
+                                                    @click="doclick3(item)">
+                                                    <li @click="modal1 = true"><a>想看</a></li>
+                                                    <li @click="modal1 = true"><a>看过</a></li>
+                                                    <li @click="modal1 = true"><a>在看</a></li>
+                                                    <li @click="modal1 = true"><a>搁置</a></li>
+                                                    <li @click="modal1 = true"><a>抛弃</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
+                                        <h3><a>{{item.name}}</a></h3>
+                                    </router-link>
+                                    <p class="info">
+                                        {{item.time}} / {{item.author}}
+                                    </p>
+                                    <p class="rateinfo">
+                                            <span><Rate class="rateinfo1" disabled
+                                                        v-model="item.score"/></span>
+                                        <small class="fade">{{item.score}}</small>
+                                        <span class="sum">({{item.number}}人评分)</span>
+
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="ul3" v-show="show3">
+                            <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
+                                :key="index">
+                                <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
+                                    <a><img class="cover" :src="item.icon"></a>
+                                </router-link>
+                                <div class="inner">
+                                    <div class="collect">
+                                        <ul class="ul9">
+                                            <li>
+                                                <a>
+                                                        <span v-show="item.show"
+                                                              @mouseover="selectStyle (item)"
+                                                        >收藏</span>
+                                                </a>
+                                                <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)"
+                                                    @click="doclick3(item)">
+                                                    <li @click="modal1 = true"><a>想看</a></li>
+                                                    <li @click="modal1 = true"><a>看过</a></li>
+                                                    <li @click="modal1 = true"><a>在看</a></li>
+                                                    <li @click="modal1 = true"><a>搁置</a></li>
+                                                    <li @click="modal1 = true"><a>抛弃</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
+                                        <h3><a>{{item.name}}</a></h3>
+                                    </router-link>
+                                    <p class="info">
+                                        {{item.time}} / {{item.author}}/{{item.jishu}}话
+                                    </p>
+                                    <p class="rateinfo">
+                                            <span><Rate class="rateinfo1" disabled
+                                                        v-model="item.score"/></span>
+                                        <small class="fade">{{item.score}}</small>
+                                        <span class="sum">({{item.number}}人评分)</span>
+
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                        <Modal class="model1" v-model="modal1" id="color" draggable scrollable
+                               :title="'收藏'+animeInfo2.name"
                                @on-ok="ok(animeInfo2)"
                                @on-cancel="cancel">
                             <div class="window">
                                 <div class="box">
                                     <form>
-                                        <div class="type" >
+                                        <div class="type">
                                             <RadioGroup v-model="type">
                                                 <Radio :label="1">在看</Radio>
                                                 <Radio :label="2">看过</Radio>
@@ -151,7 +236,8 @@
                                         <div class="cell">
                                             <p class="tip">
                                                 <label for="comment">吐槽 (简评，最多200字):</label></p>
-                                            <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
+                                            <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3"
+                                                      class="quick"></textarea>
                                         </div>
                                     </form>
 
@@ -169,12 +255,16 @@
 
 <script>
     import axios from 'axios'
+
     export default {
         name: "search",
         data() {
             return {
-                valueDisabled: 5,
-                clsstr: '',
+
+                searchSum:[
+
+                ],
+
                 animeInfo: [
                     {
                         animeAuthor: '',
@@ -189,15 +279,22 @@
                         labelType: '',
                     }
                 ],
+                bookInfo:[],
+                musicInfo:[],
                 showlist: [],
-                showlist2:[],
-                timelist:[],
                 current: 1,
                 size: 10,
                 modal1: false,
-                comment:'',
-                type:'',
-                animeInfo2:[],
+                comment: '',
+                type: '',
+                animeInfo2: [],
+                searchInfo: '',
+                cls1:'background',
+                cls2:'',
+                cls3:'',
+                show1:true,
+                show2:false,
+                show3:false
             }
         },
         methods: {
@@ -214,49 +311,101 @@
                         break;
                 }
             },
-            selectStyle (item) {
-                item.show=false;
-                item.show2=true;
+            selectStyle(item) {
+                item.show = false;
+                item.show2 = true;
             },
-            outStyle (item) {
-                item.show=true;
-                item.show2=false;
+            outStyle(item) {
+                item.show = true;
+                item.show2 = false;
             },
 
 
-            ok (animeInfo2) {
+            ok(animeInfo2) {
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
                     userId: 1,
-                    animeId:animeInfo2.animeId,
-                    code:this.type,
-                    comment:this.comment
+                    animeId: animeInfo2.animeId,
+                    code: this.type,
+                    comment: this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
                 })
 
             },
-            cancel () {
+            cancel() {
                 this.$Message.info('Clicked cancel');
             },
 
-            doclick3(item){
-                this.animeInfo2=item
+            doclick3(item) {
+                this.animeInfo2 = item
+            },
+            doclick4(item) {
+                this.showlist = this.animeInfo
+                this.cls1='background'
+                this.cls2=''
+                this.cls3=''
+                this.show1=true;
+                this.show2=false;
+                this.show3=false;
+            },
+            doclick5(item) {
+                this.showlist = this.bookInfo
+                this.cls2='background'
+                this.cls1=''
+                this.cls3=''
+                this.show1=false;
+                this.show2=true;
+                this.show3=false;
+                console.log(this.showlist)
+            },
+            doclick6(item) {
+                this.showlist = this.musicInfo
+                this.cls3='background'
+                this.cls1=''
+                this.cls2=''
+                this.show1=false;
+                this.show2=false;
+                this.show3=true;
+            },
+            dosearch() {
+                axios.post("http://localhost:8090/bangumi/search/search", {
+                    userId: 1,
+                    searchInfo: this.searchInfo,
+                }).then((res) => {
+                    this.animeInfo = res.data.searchVO.animeVOList
+                    this.bookInfo = res.data.searchVO.bookVOList
+                    this.musicInfo = res.data.searchVO.musicVOList
+                    this.showlist = this.animeInfo
+                    this.searchInfo = this.searchInfo
+                })
             }
 
         },
         computed: {
             total() {
-                return this.animeInfo.length;
+                return this.showlist.length;
             },
 
         },
         created: function () {
-            axios.get("http://localhost:8090/bangumi/anime/list")
-                .then((res) => {
-                    this.animeInfo = res.data
-                    this.showlist = res.data
-                    console.log(res.data)
-                })
+
+            var info = this.$route.params.searchInfo
+
+            if (info == null) {
+                info = this.searchInfo
+            }
+            axios.post("http://localhost:8090/bangumi/search/search", {
+                userId: 1,
+                searchInfo: info,
+            }).then((res) => {
+                this.animeInfo=res.data.searchVO.animeVOList
+                this.bookInfo=res.data.searchVO.bookVOList
+                this.musicInfo=res.data.searchVO.musicVOList
+                this.showlist=this.animeInfo
+                this.searchInfo=info
+                console.log("搜索信息"+info)
+                console.log(res.data)
+            })
         }
     }
 </script>
@@ -436,6 +585,8 @@
         margin-left: 5px;
     }
 
+
+
     /*分割线*/
 
     .content-content {
@@ -495,26 +646,43 @@
         -webkit-animation: hue 10s infinite linear;
     }
 
-    .content-right{
+    .background{
+        background: rgba(240, 145, 153, 0.92);
+
+    }
+    .background a{
+        background-image: -webkit-linear-gradient(92deg, #fff, #fff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -webkit-animation: hue 10s infinite linear;}
+
+    .brown{
+
+    }
+
+    .content-right {
         margin: 20px 10px 0 0;
         width: 655px;
         float: left;
     }
 
-    .browserTools{
+    .browserTools {
         background: none;
         padding: 5px 0;
         border-bottom: 1px solid #EEE;
         overflow: hidden;
     }
-    .browserTypeSelector{
+
+    .browserTypeSelector {
         float: right;
         height: 20px;
     }
+
     ul.browserTypeSelector li {
         float: left;
         height: 25px;
     }
+
     ul.browserTypeSelector li a {
         background-image: url(../images/排列图标.png);
         display: block;
@@ -549,7 +717,7 @@
         height: 126px;
     }
 
-    .ul3 >li:nth-of-type(even) {
+    .ul3 > li:nth-of-type(even) {
         background-color: #f9f9f9;
     }
 
@@ -594,7 +762,7 @@
 
     .ul8 {
         position: absolute;
-        left:-20px;
+        left: -20px;
         top: -5px;
         z-index: 99;
         width: 235px;
@@ -612,10 +780,11 @@
         width: auto;
     }
 
-    .ul8 li:hover{
-        background: rgba(54,156,248,0.92);
+    .ul8 li:hover {
+        background: rgba(54, 156, 248, 0.92);
     }
-    .ul8 li:hover a{
+
+    .ul8 li:hover a {
         color: white;
     }
 
@@ -626,8 +795,6 @@
         border-right: 1px solid #FFF;
         font-size: 12px;
     }
-
-
 
     .ul9 {
         margin: 0;
@@ -657,8 +824,6 @@
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fffafafa', GradientType=0);
         box-shadow: 0 1px 2px #EEE, inset 0 1px 1px #FFF;
     }
-
-
 
     .inner h3 {
         font-weight: normal;

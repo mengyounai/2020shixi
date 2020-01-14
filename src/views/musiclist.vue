@@ -72,11 +72,11 @@
                                 <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
                                     :key="index">
                                     <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
-                                    <a><img class="cover" :src="item.musicIcon"></a>
+                                    <a><img class="cover" :src="item.icon"></a>
                                     </router-link>
                                     <div class="inner">
                                         <div class="collect">
-                                            <ul class="ul9">
+                                            <ul class="ul9" v-show="item.show3">
                                                 <li>
                                                     <a>
                                                         <span v-show="item.show"
@@ -92,13 +92,17 @@
                                                     </ul>
                                                 </li>
                                             </ul>
+                                            <p class="collectModify" v-show="!item.show3" @click="doclick3(item)">
+                                                <a @click="modal1 = true">修改</a>&nbsp|
+                                                <a @click="del(item)">删除</a>
+                                            </p>
                                         </div>
                                         <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
-                                        <h3><a>{{item.musicName}}</a></h3>
+                                        <h3><a>{{item.name}}</a></h3>
                                         </router-link>
                                         <span class="rank"><small>Rank</small>{{index+1}}</span>
                                         <p class="info">
-                                            {{item.musicTime}} / {{item.musicAuthor}}
+                                            {{item.time}} / {{item.author}}
                                         </p>
                                         <p class="rateinfo">
                                             <span><Rate class="rateinfo1" disabled
@@ -111,14 +115,14 @@
                                 </li>
                             </ul>
 
-                            <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+musicInfo2.musicName"
+                            <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+musicInfo2.name"
                                    @on-ok="ok(musicInfo2)"
                                    @on-cancel="cancel">
                                 <div class="window">
                                     <div class="box">
                                         <form>
                                             <div class="type" >
-                                                <RadioGroup v-model="type">
+                                                <RadioGroup v-model="musicInfo2.collectStatus">
                                                     <Radio :label="1">在看</Radio>
                                                     <Radio :label="2">看过</Radio>
                                                     <Radio :label="3">想看</Radio>
@@ -309,7 +313,8 @@
 
             doclick(item){
                 axios.post("http://localhost:8090/bangumi/music/type", {
-                    bookName: item
+                    bookName: item,
+                    userId:1
                 }).then((res) => {
                     this.musicInfo=res.data;
                     this.showlist=res.data;
@@ -319,7 +324,8 @@
 
             doclick2(item){
                 axios.post("http://localhost:8090/bangumi/music/time", {
-                    time: item
+                    time: item,
+                    userId:1
                 }).then((res) => {
                     this.musicInfo=res.data;
                     this.showlist=res.data;
@@ -330,10 +336,11 @@
                 axios.post("http://localhost:8090/bangumi/music/collect", {
                     userId: 1,
                     musicId:musicInfo2.musicId,
-                    code:this.type,
+                    code:musicInfo2.collectStatus,
                     comment:this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
+                    location. reload()
                 })
 
             },
@@ -343,14 +350,26 @@
 
             doclick3(item){
                 this.musicInfo2=item
+            },
+            del(item) {
+                if (confirm("是否删除")){
+                    axios.post("http://localhost:8090/bangumi/music/delcollect", {
+                        userId: 1,
+                        musicId: item.musicId,
+                        code:0,
+                    }).then((res) => {
+                        location. reload()
+                    })
+                }
             }
 
 
         },
 
         created: function () {
-            axios.get("http://localhost:8090/bangumi/music/list")
-                .then((res) => {
+            axios.post("http://localhost:8090/bangumi/music/list", {
+                userId: 1
+            }).then((res) => {
                     this.musicInfo = res.data
                     this.showlist = res.data
                     console.log(res.data)
@@ -583,13 +602,6 @@
         margin-left: 100px;
         width: 590px;
         height: 75px;
-    }
-
-    .collect {
-        position: absolute;
-        right: 5px;
-        top: 30px;
-
     }
 
     .ul4 {
@@ -903,6 +915,35 @@
         margin-bottom: 0.2em;
         margin-left: 15px;
         font-size: 12px;
+    }
+
+    /*分割线*/
+    .collectModify{
+        background: #FFF url(../images/爱心.gif) no-repeat 5px 50%;
+        padding: 2px 5px 2px 17px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        background-color: #FEFEFE;
+        border: 1px solid #EEE;
+        -moz-box-shadow: 0px 2px 5px #EEE;
+        box-shadow: 0px 2px 5px #EEE;
+    }
+    .collectModify a {
+        color: #666;
+    }
+    .collectModify a:hover {
+        text-decoration: underline;
+    }
+    .collect {
+        position: absolute;
+        right: 5px;
+        top: 30px;
+        font-size: 12px;
+        color: #CCC;
+        text-shadow: none;
+
     }
 
 

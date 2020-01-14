@@ -37,8 +37,10 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
+                        <input type="text" v-model="searchInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{searchInfo:searchInfo}}">
                         <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
@@ -62,7 +64,6 @@
                         <div class="content1-1-1">
                             <h1 style="font-size:18px;line-height: 30px;"><a class="a1">ACG丶由乃</a></h1>
                         </div>
-
                     </div>
                 </div>
                 <div class="content1-2">
@@ -113,11 +114,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.animeIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.animeName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -132,11 +133,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.animeIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.animeName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -164,11 +165,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.bookIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.bookName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -185,11 +186,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'bookdetail',params:{id:item.bookId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.bookIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.bookName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -217,11 +218,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.musicIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.musicName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -236,11 +237,11 @@
                                                 <a>
                                                     <router-link class="list1" :to="{name:'musicdetail',params:{id:item.musicId}}">
                                                     <span class="pictureFrameGroup">
-                                                    <span class="img"><img :src="item.musicIcon">
+                                                    <span class="img"><img :src="item.icon">
                                                     </span>
                                                         <span class="overlay"></span>
                                                     </span>
-                                                    <p class="name">{{item.musicName}}</p>
+                                                    <p class="name">{{item.name}}</p>
                                                     </router-link>
                                                 </a>
                                             </li>
@@ -422,7 +423,8 @@
                 show6:true,
                 show7:true,
                 show8:true,
-                show9:true
+                show9:true,
+                searchInfo:'',
             }
         },
 

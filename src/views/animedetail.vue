@@ -58,7 +58,7 @@
         <div class="content">
             <div class="content-header">
                 <h1>
-                    <a>{{animeInfo.animeName}}</a>
+                    <a>{{animeInfo.name}}</a>
                     <small class="grey">TV</small>
                 </h1>
                 <div class="content-header-1">
@@ -80,25 +80,25 @@
                             <div class="box">
                                 <div class="center">
                                     <a>
-                                        <img class="cover" :src="animeInfo.animeIcon">
+                                        <img class="cover" :src="animeInfo.icon">
                                     </a>
                                 </div>
                                 <ul class="ul4">
                                     <li>
                                         <span class="tip">中文名: </span>
-                                        {{animeInfo.animeName}}
+                                        {{animeInfo.name}}
                                     </li>
                                     <li>
                                         <span class="tip">放送时间: </span>
-                                        {{animeInfo.animeTime}}
+                                        {{animeInfo.time}}
                                     </li>
                                     <li>
                                         <span class="tip">原作: </span>
-                                        <a>{{animeInfo.animeAuthor}}</a>
+                                        <a>{{animeInfo.author}}</a>
                                     </li>
                                     <li>
                                         <span class="tip">集数: </span>
-                                        {{animeInfo.animeJishu}}话
+                                        {{animeInfo.jishu}}话
                                     </li>
                                 </ul>
                             </div>
@@ -116,13 +116,21 @@
                                 <div class="rate1">
                                     <h2>收藏盒</h2>
                                     <div class="tab">
-                                        <ul class="ul5">
+                                        <ul class="ul5" v-show="animeInfo.show3">
                                             <li @click="modal1 = true"><a class="thickbox"><span>想看</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>看过</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>在看</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>搁置</span></a></li>
                                             <li @click="modal1 = true"><a class="thickbox"><span>抛弃</span></a></li>
                                         </ul>
+                                        <span style="color: rgba(17,56,255,0.82)" v-show="!animeInfo.show3">
+                                            我{{msg}}这部动漫
+                                            <a class="collectModify" >
+                                                <a @click="modal1 = true">修改</a>&nbsp
+                                                <a @click="del()">删除</a>
+                                            </a>
+                                        </span>
+
                                     </div>
                                     <hr class="board">
                                     <div class="rate2">
@@ -183,14 +191,14 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+animeInfo.animeName"
+                                                <Modal class="model1"  v-model="modal1"  draggable scrollable :title="'收藏'+animeInfo.name"
                                                        @on-ok="ok(animeInfo)"
                                                        @on-cancel="cancel">
                                                     <div class="window">
                                                         <div class="box1">
                                                             <form>
                                                                 <div class="type" >
-                                                                    <RadioGroup v-model="type">
+                                                                    <RadioGroup v-model="animeInfo.collectStatus">
                                                                         <Radio :label="1">在看</Radio>
                                                                         <Radio :label="2">看过</Radio>
                                                                         <Radio :label="3">想看</Radio>
@@ -332,15 +340,29 @@
                     var a = Math.round(this.count5 / this.sum * 100)
                     return a;
                 }
+            },
+            msg(){
+                var msg='';
+                if (this.animeInfo.collectStatus==1){
+                    msg='在看'
+                }else if (this.animeInfo.collectStatus==2) {
+                    msg='看过'
+                }else if (this.animeInfo.collectStatus==3) {
+                    msg='想看'
+                }else if (this.animeInfo.collectStatus==4) {
+                    msg='搁置'
+                }else if (this.animeInfo.collectStatus==5) {
+                    msg='抛弃'
+                }
+                return msg;
             }
         },
         methods:{
 
-
             doclick() {
                 axios.post("http://localhost:8090/bangumi/anime/rateup", {
                     animeId: this.animeInfo.animeId,
-                    userId:2,
+                    userId:1,
                     score:this.rate,
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/anime/rate", {
@@ -359,9 +381,9 @@
             },
             ok (animeInfo) {
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
-                    userId: 3,
+                    userId: 1,
                     animeId:animeInfo.animeId,
-                    code:this.type,
+                    code:this.animeInfo.collectStatus,
                     comment:this.comment
                 }).then((res) => {
                     axios.post("http://localhost:8090/bangumi/anime/discuss", {
@@ -370,6 +392,7 @@
                         this.dInfo=res.data;
                     })
                     this.$Message.info('Clicked ok');
+                    location. reload()
 
                 })
 
@@ -377,6 +400,18 @@
             cancel () {
                 this.$Message.info('Clicked cancel');
             },
+
+            del() {
+                if (confirm("是否删除")){
+                    axios.post("http://localhost:8090/bangumi/anime/delcollect", {
+                        userId: 1,
+                        animeId: this.animeInfo.animeId,
+                        code:0,
+                    }).then((res) => {
+                        location. reload()
+                    })
+                }
+            }
         },
         created:function () {
             var id = this.$route.params.id
@@ -386,6 +421,7 @@
             }
 
             axios.post("http://localhost:8090/bangumi/anime/detail", {
+                userId:1,
                 animeId: id
             }).then((res) => {
                 this.animeInfo=res.data;
@@ -1077,6 +1113,14 @@
     }
 
     /*分割线*/
+
+    .collectModify a {
+
+    }
+    .collectModify a:hover {
+        text-decoration: underline;
+    }
+
 
 
 

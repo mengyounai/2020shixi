@@ -37,8 +37,10 @@
                 <a href="#"><img src="../images/天窗.png" style="margin-left: 10px"></a>
                 <div class="search">
                     <form>
-                        <input type="text" placeholder="请输入...">
+                        <input type="text" v-model="serachInfo" placeholder="请输入...">
+                        <router-link :to="{name:'search',params:{serachInfo:serachInfo}}">
                         <Button icon="ios-search"></Button>
+                        </router-link>
                     </form>
                 </div>
                 <div class="img1">
@@ -72,16 +74,16 @@
                                 <li class="ul4" v-for="(item,index) in showlist.slice(0, 10)" :info="item"
                                     :key="index">
                                     <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
-                                    <a><img class="cover" :src="item.animeIcon"></a>
+                                    <a><img class="cover" :src="item.icon"></a>
                                     </router-link>
                                     <div class="inner">
                                         <div class="collect">
-                                            <ul class="ul9">
+                                            <ul class="ul9" v-show="item.show3">
                                                 <li>
                                                     <a>
                                                         <span v-show="item.show"
-                                                        @mouseover="selectStyle (item)"
-                                                              >收藏</span>
+                                                              @mouseover="selectStyle (item)"
+                                                        >收藏</span>
                                                     </a>
                                                     <ul class="ul8" v-show="item.show2" @mouseleave="outStyle(item)" @click="doclick3(item)">
                                                         <li @click="modal1 = true"><a>想看</a></li>
@@ -92,13 +94,17 @@
                                                     </ul>
                                                 </li>
                                             </ul>
+                                            <p class="collectModify" v-show="!item.show3" @click="doclick3(item)">
+                                                <a @click="modal1 = true">修改</a>&nbsp|
+                                                <a @click="del(item)">删除</a>
+                                            </p>
                                         </div>
                                         <router-link class="list1" :to="{name:'animedetail',params:{id:item.animeId}}">
-                                        <h3><a>{{item.animeName}}</a></h3>
+                                        <h3><a>{{item.name}}</a></h3>
                                         </router-link>
                                         <span class="rank"><small>Rank</small>{{index+1}}</span>
                                         <p class="info">
-                                            {{item.animeJishu}}话 / {{item.animeTime}} / {{item.animeAuthor}}
+                                            {{item.jishu}}话 / {{item.time}} / {{item.author}}
                                         </p>
                                         <p class="rateinfo">
                                             <span><Rate class="rateinfo1" disabled
@@ -110,14 +116,14 @@
                                     </div>
                                 </li>
                             </ul>
-                            <Modal class="model1"  v-model="modal1" id="color"  draggable scrollable :title="'收藏'+animeInfo2.animeName"
+                            <Modal class="model1"  v-model="modal1" id="color"  draggable scrollable :title="'收藏'+animeInfo2.name"
                                    @on-ok="ok(animeInfo2)"
                                    @on-cancel="cancel">
                                 <div class="window">
                                     <div class="box">
                                         <form>
                                             <div class="type" >
-                                                <RadioGroup v-model="type">
+                                                <RadioGroup v-model="animeInfo2.collectStatus">
                                                     <Radio :label="1">在看</Radio>
                                                     <Radio :label="2">看过</Radio>
                                                     <Radio :label="3">想看</Radio>
@@ -127,16 +133,13 @@
                                             </div>
                                             <div class="cell">
                                                 <p class="tip">
-                                                    <label for="comment">吐槽 (简评，最多200字):</label></p>
-                                                <textarea v-model="comment" name="comment" id="comment" cols="32" rows="3" class="quick"></textarea>
+                                                    <label >吐槽 (简评，最多200字):</label></p>
+                                                <textarea v-model="comment"  cols="32" rows="3" class="quick"></textarea>
                                             </div>
                                         </form>
-
                                     </div>
-
                                 </div>
                             </Modal>
-
                         </div>
                     </div>
                     <div class="content-right">
@@ -273,6 +276,7 @@
                 comment:'',
                 type:'',
                 animeInfo2:[],
+                serachInfo:'',
             }
         },
         computed: {
@@ -307,7 +311,8 @@
 
             doclick(item){
                 axios.post("http://localhost:8090/bangumi/anime/type", {
-                    bookName: item
+                    bookName: item,
+                    userId:1
                 }).then((res) => {
                     this.animeInfo=res.data;
                     this.showlist=res.data;
@@ -317,7 +322,8 @@
 
             doclick2(item){
                 axios.post("http://localhost:8090/bangumi/anime/time", {
-                    time: item
+                    time: item,
+                    userId:1
                 }).then((res) => {
                     this.animeInfo=res.data;
                     this.showlist=res.data;
@@ -328,10 +334,11 @@
                 axios.post("http://localhost:8090/bangumi/anime/collect", {
                     userId: 1,
                     animeId:animeInfo2.animeId,
-                    code:this.type,
+                    code:animeInfo2.collectStatus,
                     comment:this.comment
                 }).then((res) => {
                     this.$Message.info('Clicked ok');
+                    location. reload()
                 })
 
             },
@@ -341,13 +348,24 @@
 
             doclick3(item){
                 this.animeInfo2=item
+            },
+            del(item) {
+                if (confirm("是否删除")){
+                axios.post("http://localhost:8090/bangumi/anime/delcollect", {
+                    userId: 1,
+                    animeId: item.animeId,
+                    code:0,
+                }).then((res) => {
+                    location. reload()
+                })
             }
-
+            }
         },
 
         created: function () {
-            axios.get("http://localhost:8090/bangumi/anime/list")
-                .then((res) => {
+            axios.post("http://localhost:8090/bangumi/anime/list", {
+                userId: 1,
+            }).then((res) => {
                     this.animeInfo = res.data
                     this.showlist = res.data
                     console.log(res.data)
@@ -582,12 +600,6 @@
         height: 75px;
     }
 
-    .collect {
-        position: absolute;
-        right: 5px;
-        top: 30px;
-
-    }
 
     .ul4 {
 
@@ -969,5 +981,32 @@
 
     /*分割线*/
 
+    .collectModify{
+        background: #FFF url(../images/爱心.gif) no-repeat 5px 50%;
+        padding: 2px 5px 2px 17px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        background-color: #FEFEFE;
+        border: 1px solid #EEE;
+        -moz-box-shadow: 0px 2px 5px #EEE;
+        box-shadow: 0px 2px 5px #EEE;
+    }
+    .collectModify a {
+        color: #666;
+    }
+    .collectModify a:hover {
+        text-decoration: underline;
+    }
+    .collect {
+        position: absolute;
+        right: 5px;
+        top: 30px;
+        font-size: 12px;
+        color: #CCC;
+        text-shadow: none;
+
+    }
 
 </style>

@@ -10,9 +10,12 @@ import personal from '../views/personal'
 import animedetail from '../views/animedetail'
 import bookdetail from '../views/bookdetail'
 import musicdetail from '../views/musicdetail'
+import peopledetail from '../views/peopledetail'
 import test from '../views/test'
 import reset from '../views/reset'
 import search from '../views/search'
+import login from '../views/login'
+import register from '../views/register'
 
 
 Vue.use(VueRouter)
@@ -79,9 +82,24 @@ const routes = [
         component: reset
     },
     {
-        path: '/search',
+        path: '/search/:searchInfo',
         name: 'search',
         component: search
+    },
+    {
+        path: '/peopledetail/:id',
+        name: 'peopledetail',
+        component: peopledetail
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: login
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: register
     },
 
   {
